@@ -64,6 +64,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\TRMData.publish.xml" />
-    <None Include="PublishLocations\TRMData.publish2.xml" />
   </ItemGroup>
 </Project>
