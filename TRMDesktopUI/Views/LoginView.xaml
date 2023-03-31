@@ -6,39 +6,50 @@
              xmlns:local="clr-namespace:TRMDesktopUI.Views"
              mc:Ignorable="d" Background="White"
              d:DesignHeight="425" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
+	<Grid>
+		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="auto" />
 			<ColumnDefinition Width="auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="48" FontFamily="Segoe UI Light" Margin="0 0 0 20">
+		<TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" 
+		           HorizontalAlignment="Center" 
+		           FontSize="48" FontFamily="Segoe UI Light" 
+		           Margin="0 0 0 20">
             Login Form
-        </TextBlock>
+		</TextBlock>
 
-        <!-- Username row -->
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin="0 0 0 20">
+		<!-- Error Message row -->
+		<TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                   Margin="0 0 0 20" 
+                   Foreground="Red" 
+                   TextWrapping="Wrap" MinWidth="350" />
+
+		<!-- Username row -->
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 5 20">
             Username:
         </TextBlock>
-		<TextBox x:Name="UserName" Grid.Row="1" Grid.Column="2" MinWidth="150" Margin="0 0 0 20" />
+		<TextBox x:Name="UserName" Grid.Row="2" Grid.Column="2" MinWidth="350" Margin="0 0 0 20" />
 
         <!-- Password row -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 20">
+        <TextBlock Grid.Row="3" Grid.Column="1" Margin="0 0 5 20">
 	        Password:
         </TextBlock>
-        <PasswordBox x:Name="Password" Grid.Row="2" Grid.Column="2" MinWidth="150" Margin="0 0 0 20" />
+		<PasswordBox x:Name="Password" Grid.Row="3" Grid.Column="2" MinWidth="350" Margin="0 0 0 20" />
 
         <!-- Login row -->
-        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+        <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
                 HorizontalAlignment="Center" x:Name="LogIn" Padding="20 5">
             Log in
         </Button>
