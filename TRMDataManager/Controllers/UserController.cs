@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using TRMDataManager.Library.DataAccess;
@@ -11,12 +12,12 @@ namespace TRMDataManager.Controllers
     public class UserController : ApiController
     {
         // GET: User/Details/5
-        public List<UserModel> GetById()
+        public UserModel GetById()
         {
 	        string userId = RequestContext.Principal.Identity.GetUserId();
             var data = new UserData();
 
-            return data.GetUserById(userId);
+            return data.GetUserById(userId).First();
         }
     }
 }
