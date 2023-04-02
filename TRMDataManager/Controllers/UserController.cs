@@ -8,7 +8,7 @@ using TRMDataManager.Library.Models;
 namespace TRMDataManager.Controllers
 {
 	[Authorize]
-	[Route("api/User")]
+	[Route("api/user")]
     public class UserController : ApiController
     {
         // GET: User/Details/5

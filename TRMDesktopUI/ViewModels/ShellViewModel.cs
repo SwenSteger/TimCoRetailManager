@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using TRMDesktopUI.EventModels;
@@ -17,7 +18,17 @@ namespace TRMDesktopUI.ViewModels
 			_container = container;
 			_events = events;
 			_events.SubscribeOnPublishedThread(this);
-			ActivateItemAsync(_container.GetInstance<LoginViewModel>());
+		}
+
+		protected override async void OnViewLoaded(object view)
+		{
+			base.OnViewLoaded(view);
+			await ActivateLoginViewModel();
+		}
+
+		public async Task ActivateLoginViewModel()
+		{
+			await ActivateItemAsync(_container.GetInstance<LoginViewModel>());
 		}
 
 		public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken = default)
