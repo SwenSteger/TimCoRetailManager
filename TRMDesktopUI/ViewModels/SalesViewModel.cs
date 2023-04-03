@@ -81,26 +81,17 @@ namespace TRMDesktopUI.ViewModels
 
 		public string SubTotal => CalculateSubTotal().ToString("C");
 
-		private decimal CalculateSubTotal()
-		{
-			decimal subTotal = 0;
-			foreach (var item in Cart)
-				subTotal += (item.Product.RetailPrice * item.QuantityInCart);
-			return subTotal;
-		}
+		private decimal CalculateSubTotal() 
+			=> Cart.Sum(item => (item.Product.RetailPrice * item.QuantityInCart));
 
 		public string Tax => CalculateTotalTax().ToString("C2");
 
 		private decimal CalculateTotalTax()
 		{
-			decimal taxAmount = 0;
 			decimal taxRate = _configHelper.GetTaxRate() / 100;
-
-			foreach (var item in Cart)
-				if (item.Product.IsTaxable)
-					taxAmount += (item.Product.RetailPrice * item.QuantityInCart) * taxRate;
-
-			return taxAmount;
+			return Cart
+				.Where(item => item.Product.IsTaxable)
+				.Sum(item => (item.Product.RetailPrice * item.QuantityInCart) * taxRate);
 		}
 
 		public string Total
