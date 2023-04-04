@@ -8,15 +8,9 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
-	[EnableCors(origins: "https://localhost:7030", headers: "*", methods: "*")]
-	public class BaseApiController : ApiController
-	{
-
-	}
-
 	[Authorize]
 	[Route("api/user")]
-	public class UserController : BaseApiController
+	public class UserController : ApiController
 	{
         // GET: User/Details/5
         public UserModel GetById()

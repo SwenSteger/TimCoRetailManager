@@ -5,7 +5,7 @@ using TRMDataManager.Library.Models;
 namespace TRMDataManager.Controllers
 {
     [Authorize]
-    public class SaleController : BaseApiController
+    public class SaleController : ApiController
 	{
         // POST api/<controller>
         public void Post(SaleModel sale)

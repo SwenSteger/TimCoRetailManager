@@ -14,16 +14,8 @@ namespace TRMFrontEnd.Library.Api
 	{
 		private HttpClient _apiClient;
 		private readonly ILoggedInUserModel _loggedInUser;
-		// private readonly IConfiguration _configuration;
 		private readonly Func<IConfiguration> _funcConfiguration;
 		private IConfiguration Configuration => _funcConfiguration?.Invoke();
-
-		// public ApiHelper(ILoggedInUserModel loggedInUser, IConfiguration configuration)
-		// {
-		// 	_loggedInUser = loggedInUser;
-		// 	_configuration = configuration;
-		// 	InitializeClient();
-		// }
 
 		public ApiHelper(ILoggedInUserModel loggedInUser, Func<IConfiguration> configuration)
 		{

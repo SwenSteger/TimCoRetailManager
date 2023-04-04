@@ -8,7 +8,7 @@ namespace TRMDataManager.Controllers
 {
 	//[Authorize]
 	[Route("api/product")]
-    public class ProductController : BaseApiController
+    public class ProductController : ApiController
 	{
 	    // GET: User/Details/5
 	    public List<ProductModel> Get()

@@ -6,51 +6,14 @@ using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
 using TRMDesktopUI.Helpers;
 using TRMDesktopUI.ViewModels;
 using TRMFrontEnd.Library.Api;
 using TRMFrontEnd.Library.Helpers;
 using TRMFrontEnd.Library.Models;
-using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace TRMDesktopUI
 {
-	public class Configuration : IConfiguration
-	{
-		private readonly IConfigurationRoot _configuration;
-
-		public Configuration()
-		{
-			_configuration = new ConfigurationBuilder()
-				.AddInMemoryCollection(new Dictionary<string, string>
-				{
-					{"api", "https://localhost:44361/"},
-					{"taxRate", "8.75"}
-				})
-				.Build();
-		}
-		public IConfigurationSection GetSection(string key)
-		{
-			return _configuration.GetSection(key);
-		}
-
-		public IEnumerable<IConfigurationSection> GetChildren()
-		{
-			return _configuration.GetChildren();
-		}
-
-		public IChangeToken GetReloadToken()
-		{
-			return _configuration.GetReloadToken();
-		}
-
-		public string this[string key]
-		{
-			get => _configuration[key];
-			set => throw new NotImplementedException();
-		}
-	}
 	public class Bootstrapper : BootstrapperBase
 	{
 		private readonly SimpleContainer _container = new SimpleContainer();

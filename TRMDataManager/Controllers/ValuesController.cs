@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 namespace TRMDataManager.Controllers
 {
     [Authorize]
-    public class ValuesController : BaseApiController
+    public class ValuesController : ApiController
 	{
         // GET api/values
         public IEnumerable<string> Get()
