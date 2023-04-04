@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using TRMDesktopUI.Library.Models;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace TRMDesktopUI.Library.Api
 {

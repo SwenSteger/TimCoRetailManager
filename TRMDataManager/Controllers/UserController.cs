@@ -1,16 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Microsoft.AspNet.Identity;
 using TRMDataManager.Library.DataAccess;
 using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
+	[EnableCors(origins: "https://localhost:7030", headers: "*", methods: "*")]
+	public class BaseApiController : ApiController
+	{
+
+	}
+
 	[Authorize]
 	[Route("api/user")]
-    public class UserController : ApiController
-    {
+	public class UserController : BaseApiController
+	{
         // GET: User/Details/5
         public UserModel GetById()
         {

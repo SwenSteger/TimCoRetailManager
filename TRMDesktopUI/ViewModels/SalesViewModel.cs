@@ -1,12 +1,10 @@
 ﻿using Caliburn.Micro;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using TRMDesktopUI.Library.Api;
-using TRMDesktopUI.Library.Helpers;
-using TRMDesktopUI.Library.Models;
+using TRMFrontEnd.Library.Api;
+using TRMFrontEnd.Library.Helpers;
+using TRMFrontEnd.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -14,11 +12,13 @@ namespace TRMDesktopUI.ViewModels
 	{
 		private readonly IProductEndpoint _productEndpoint;
 		private readonly IConfigHelper _configHelper;
+		private readonly ISaleEndpoint _saleEndpoint;
 
-		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndpoint saleEndpoint)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
+			_saleEndpoint = saleEndpoint;
 		}
 
 		protected override async void OnViewLoaded(object view)
@@ -133,6 +133,7 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 
 			// Doesn't seem to update the QuantityInStock for the products list :(
 			var selectedItem = Products.FirstOrDefault(x => x == SelectedProduct);
@@ -149,30 +150,33 @@ namespace TRMDesktopUI.ViewModels
 
 				// Make sure something is selected
 
-				NotifyOfPropertyChange(() => SubTotal);
-				NotifyOfPropertyChange(() => Tax);
-				NotifyOfPropertyChange(() => Total);
 				return output;
 			}
 		}
 		public void RemoveFromCart()
 		{
-
+			NotifyOfPropertyChange(() => SubTotal);
+			NotifyOfPropertyChange(() => Tax);
+			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
-		public bool CanCheckOut
+		public bool CanCheckOut => Cart.Any();
+
+		public async Task CheckOut()
 		{
-			get
+			// create a SaleModel and post to api
+			var sale = new SaleModel();
+			foreach (var item in Cart)
 			{
-				bool output = false;
-
-				// Make sure something is in cart
-
-				return output;
+				sale.SaleDetails.Add(new SaleDetailModel
+				{
+					ProductId = item.Product.Id,
+					Quantity = item.QuantityInCart
+				});
 			}
-		}
-		public void CheckOut()
-		{
+
+			await _saleEndpoint.PostSale(sale);
 
 		}
 	}

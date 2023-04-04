@@ -9,7 +9,7 @@ using System.Web.Routing;
 
 namespace TRMDataManager
 {
-	public class WebApiApplication : System.Web.HttpApplication
+	public class WebApiApplication : HttpApplication
 	{
 		protected void Application_Start()
 		{
@@ -19,5 +19,18 @@ namespace TRMDataManager
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 		}
+
+		// protected void Application_BeginRequest(object sender, EventArgs e)
+		// {
+		// 	if (Request.HttpMethod == "OPTIONS")
+		// 	{
+		// 		Response.Headers.Add("Access-Control-Allow-Origin", "https://localhost:7030");
+		// 		Response.Headers.Add("Access-Control-Allow-Headers", "Authorization,Content-Type");
+		// 		Response.Headers.Add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+		// 		Response.StatusCode = 200;
+		// 		Response.End();
+		// 	}
+		// }
+
 	}
 }

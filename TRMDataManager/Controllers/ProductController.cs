@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using TRMDataManager.Library.DataAccess;
@@ -10,10 +6,10 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
-	[Authorize]
+	//[Authorize]
 	[Route("api/product")]
-    public class ProductController : ApiController
-    {
+    public class ProductController : BaseApiController
+	{
 	    // GET: User/Details/5
 	    public List<ProductModel> Get()
 	    {

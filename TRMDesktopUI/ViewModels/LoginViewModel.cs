@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using TRMDesktopUI.EventModels;
-using TRMDesktopUI.Library.Api;
+using TRMFrontEnd.Library.Api;
 
 namespace TRMDesktopUI.ViewModels
 {
 	public class LoginViewModel : Screen
 	{
-		private string _userName;
-		private string _password;
+		private string _userName = "ngage";
+		private string _password = "Psd123.";
 		private string _errorMessage;
 		private readonly IApiHelper _apiHelper;
 		private readonly IEventAggregator _events;

@@ -1,0 +1,18 @@
+﻿@page "/"
+@using TRMFrontEnd.Library.Models
+
+@inject IApiHelper ApiHelper
+@inject ILoggedInUserModel LoggedInUserModel
+
+<h1>Hello, @Username</h1>
+
+@code {
+	public string Username { get; set; } = "world";
+
+	protected override async Task OnInitializedAsync()
+	{
+		var result = await ApiHelper.Authenticate("ngage", "Psd123.");
+		await ApiHelper.GetLoggedInUserInfo(result.Access_Token);
+		Username = LoggedInUserModel.FirstName;
+	}
+}
