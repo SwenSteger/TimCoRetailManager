@@ -1,5 +1,111 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+/*
+$primary: #2C3E50;
+$secondary: #E74C3C;
+$success: #2ECC71;
+$info: #3498DB;
+$warning: #F1C40F;
+$danger: #FF4136;
+$light: #F8F9FA;
+$dark: #343A40;
+ */
+
+html, body {
+	font-family: 'Saira Condensed', sans-serif;
+	font-size: 1.1em;
+	font-weight: 400;
+	min-height: 100%;
+	color: #363636;
+}
+
+/*
+body::before {
+    content: "N";
+    font-family: 'Saira Condensed', sans-serif;
+    font-size: 1800px;
+    font-weight: bold;
+    opacity: 0.1;
+    position: fixed;
+    top: -500px;
+    right: -350px;
+    transform: rotate(10deg) scaleX(120%);
+    z-index: -1;
+    color: #a31a0b90;
+	animation: fadeInBody 2.5s ease-in 1.5s backwards;
+}
+body::after {
+    content: "ngageonline";
+    font-family: 'Saira Condensed', sans-serif;
+    font-size: 300px;
+    font-weight: 900;
+    opacity: 0.1;
+    position: fixed;
+    top: 470px;
+    left: -500px;
+    transform: rotate(-90deg);
+    z-index: -1;
+    color: #AAAAAA60;
+    animation: fadeInBody 2.5s ease-in 1.5s backwards;
+}
+*/
+h1, h2, h3, h4, h5, h6 {
+	/*color: white;*/
+}
 h1:focus {
-    outline: none;
+	outline: none;
+}
+
+.content {
+	padding-top: 0.9rem;
+}
+.alert.alert-secondary {
+	background-color: #10101080;
+}
+
+a {
+	color: #b23330;
+}
+a:hover {
+	color: #d34b48;
+}
+
+/* NAV */
+.nav-link {
+	font-family: 'Saira Condensed', sans-serif;
+	font-size: 1em;
+	font-weight: 400;
+	letter-spacing: 1px;
+	line-height: 40px;
+}
+
+li.nav-item a.nav-link {
+	margin: 0 2px;
+	padding: 9px 20px!important;
+}
+li.nav-item a.nav-link:hover {
+	background: #35353590;
+	/*background: linear-gradient(180deg, rgba(50, 50, 50, 0.75) 0%, rgba(20, 20, 20, 0.25) 100%);*/
+}
+
+li.nav-item a.nav-link.active {
+	background: #b23330;
+	/*background: linear-gradient(180deg, rgba(143, 40, 50, 0.5) 0%, rgba(143, 40, 50, 1) 100%);*/
+}
+li.nav-item a.nav-link.active:hover {
+	color: white;
+	background: #d34b48;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
 }
 
 #blazor-error-ui {
@@ -29,4 +135,37 @@ h1:focus {
 
     .blazor-error-boundary::after {
         content: "An error has occurred."
+    }
+
+.loading-progress {
+    position: relative;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem auto;
+}
+
+    .loading-progress circle {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        .loading-progress circle:last-child {
+            stroke: #a31a0b;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+}
+
+    .loading-progress-text:after {
+        content: var(--blazor-load-percentage-text, "Loading");
     }

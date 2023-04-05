@@ -10,5 +10,7 @@ namespace TRMFrontEnd.Library.Models
 		public string LastName { get; set; }
 		public string EmailAddress { get; set; }
 		public DateTime CreatedDate { get; set; }
+		
+		public bool IsAuthenticated => !string.IsNullOrWhiteSpace(Token);
 	}
 }

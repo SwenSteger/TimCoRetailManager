@@ -1,18 +1,23 @@
 ﻿@page "/"
-@using TRMFrontEnd.Library.Models
 
+@inject ILocalStorageService LocalStorage
 @inject IApiHelper ApiHelper
 @inject ILoggedInUserModel LoggedInUserModel
 
-<h1>Hello, @Username</h1>
+<div class="col-6">
+	<h1>Hello, @Username</h1>
+</div>
 
 @code {
-	public string Username { get; set; } = "world";
+	public string Username { get; set; } = "User";
 
 	protected override async Task OnInitializedAsync()
 	{
-		var result = await ApiHelper.Authenticate("ngage", "Psd123.");
-		await ApiHelper.GetLoggedInUserInfo(result.Access_Token);
-		Username = LoggedInUserModel.FirstName;
+		var token = await LocalStorage.GetItemAsync<string>("authToken");
+		if (token != null)
+		{
+			await ApiHelper.GetLoggedInUserInfo(token);
+			Username = LoggedInUserModel.FirstName;
+		}
 	}
 }

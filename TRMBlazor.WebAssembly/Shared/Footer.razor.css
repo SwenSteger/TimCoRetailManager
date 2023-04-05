@@ -1,0 +1,25 @@
+﻿
+.bg-footer {
+	background: rgb(53,53,53);
+	background: linear-gradient(135deg, rgba(32,32,32,1) 15%, rgba(75,75,75,1) 50%, rgba(32,32,32,1) 85%);
+	/*border-top: 4px solid #151515;*/
+	box-shadow: -4px -8px 16px #0004;
+	padding: 0;
+}
+
+.footer {
+	position: fixed;
+	text-align: center;
+	line-height: 32px;
+	min-height: 32px;
+	font-size: 0.85em;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	color: #999;
+}
+
+.footer span {
+	color: #c74436;
+}
+
