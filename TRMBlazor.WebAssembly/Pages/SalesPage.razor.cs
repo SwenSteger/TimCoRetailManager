@@ -11,8 +11,8 @@ public partial class SalesPage : ComponentBase
 	[Inject] public IConfigHelper ConfigHelper { get; set; }
 	[Inject] public ISaleEndpoint SaleEndpoint { get; set; }
 
-	public List<ProductModel> Products { get; set; } = new List<ProductModel>();
-	public List<CartItemModel> Cart { get; set; } = new List<CartItemModel>();
+	public List<ProductModel> Products { get; set; } = new();
+	public List<CartItemModel> Cart { get; } = new();
 
 	public ProductModel SelectedProduct { get; set; }
 	public CartItemModel SelectedCartItem { get; set; }
@@ -43,7 +43,6 @@ public partial class SalesPage : ComponentBase
 			.Where(item => item.Product.IsTaxable)
 			.Sum(item => (item.Product.RetailPrice * item.QuantityInCart) * taxRate);
 	}
-
 
 	public bool CanAddToCart => ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity;
 	public void AddToCart()

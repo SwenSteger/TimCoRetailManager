@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using TRMDesktopUI.EventModels;
+using TRMFrontEnd.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -10,10 +11,12 @@ namespace TRMDesktopUI.ViewModels
 	{
 		private readonly IEventAggregator _events;
 		private readonly SalesViewModel _salesViewModel;
+		private readonly ILoggedInUserModel _user;
 
-		public ShellViewModel(IEventAggregator events, SalesViewModel salesViewModel)
+		public ShellViewModel(IEventAggregator events, SalesViewModel salesViewModel, ILoggedInUserModel user)
 		{
 			_salesViewModel = salesViewModel;
+			_user = user;
 			_events = events;
 			_events.SubscribeOnPublishedThread(this);
 		}
@@ -24,14 +27,26 @@ namespace TRMDesktopUI.ViewModels
 			await ActivateLoginViewModel();
 		}
 
-		public async Task ActivateLoginViewModel()
+		public void ExitApplication()
 		{
-			await ActivateItemAsync(IoC.Get<LoginViewModel>());
+			TryCloseAsync();
 		}
+
+		public bool IsLoggedIn => !string.IsNullOrWhiteSpace(_user.Token);
+
+		public async Task LogOut()
+		{
+			_user.LogOffUser();
+			await ActivateLoginViewModel();
+			NotifyOfPropertyChange(() => IsLoggedIn);
+		}
+		public async Task ActivateLoginViewModel() 
+			=> await ActivateItemAsync(IoC.Get<LoginViewModel>());
 
 		public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken = default)
 		{
 			await ActivateItemAsync(_salesViewModel, cancellationToken);
+			NotifyOfPropertyChange(() => IsLoggedIn);
 		}
 	}
 }

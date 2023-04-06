@@ -34,6 +34,17 @@ namespace TRMDesktopUI.ViewModels
 			await LoadProducts();
 		}
 
+		private async Task ResetSalesViewModel()
+		{
+			Cart = new BindingList<CartItemDisplayModel>();
+			ItemQuantity = 1;
+			await LoadProducts();
+
+			NotifyOfPropertyChange(() => SubTotal);
+			NotifyOfPropertyChange(() => Tax);
+			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
+		}
 		public async Task LoadProducts()
 		{
 			var productList = await _productEndpoint.GetAll();
@@ -149,7 +160,7 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
-		public bool CanRemoveFromCart => SelectedCartItem != null && SelectedCartItem?.Product.QuantityInStock > 0;
+		public bool CanRemoveFromCart => SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0;
 
 		public void RemoveFromCart()
 		{
@@ -164,6 +175,7 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
 			NotifyOfPropertyChange(() => CanCheckOut);
+			NotifyOfPropertyChange(() => CanAddToCart);
 		}
 
 		public bool CanCheckOut => Cart.Any();
@@ -172,6 +184,7 @@ namespace TRMDesktopUI.ViewModels
 		{
 			// create a SaleModel and post to api
 			var sale = new SaleModel();
+
 			foreach (var item in Cart)
 			{
 				sale.SaleDetails.Add(new SaleDetailModel
@@ -182,6 +195,8 @@ namespace TRMDesktopUI.ViewModels
 			}
 
 			await _saleEndpoint.PostSale(sale);
+
+			await ResetSalesViewModel();
 		}
 	}
 }

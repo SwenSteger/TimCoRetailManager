@@ -12,5 +12,15 @@ namespace TRMFrontEnd.Library.Models
 		public DateTime CreatedDate { get; set; }
 		
 		public bool IsAuthenticated => !string.IsNullOrWhiteSpace(Token);
+
+		public void LogOffUser()
+		{
+			Token = "";
+			Id = "";
+			FirstName = "";
+			LastName = "";
+			EmailAddress = "";
+			CreatedDate = DateTime.MinValue;
+		}
 	}
 }

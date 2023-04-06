@@ -12,5 +12,7 @@ namespace TRMFrontEnd.Library.Models
 		DateTime CreatedDate { get; set; }
 		
 		bool IsAuthenticated { get; }
+
+		void LogOffUser();
 	}
 }
