@@ -1,0 +1,12 @@
+﻿@using TRMBlazor.WebAssembly.Pages
+@inject ILoggedInUserModel LoggedInUserModel
+
+@if (!LoggedInUserModel?.IsAuthenticated ?? true)
+{
+	<div class="login-message-container">
+		<div>
+			<h1>Welcome to TimCo RM</h1>
+			<h5>Please log in to continue</h5>
+		</div>
+	</div>
+}

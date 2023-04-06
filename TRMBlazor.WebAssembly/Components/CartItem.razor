@@ -1,0 +1,28 @@
+﻿@inherits ComponentBase
+@using TRMFrontEnd.Library.Models
+
+<li class="list-group-item cart-item @SelectedClass" @onclick="ItemSelected">
+	<div class="d-flex flex-row justify-content-between">
+	<span>@Item.DisplayText</span>
+		<button class="btn btn-sm btn-danger" @onclick="RemoveItem"><i class="oi oi-delete"></i></button>
+	</div>
+</li>
+
+
+@code {
+	[Parameter] public CartItemModel Item { get; set; }
+	[Parameter] public EventCallback<CartItemModel> OnItemSelected { get; set; }
+	[Parameter] public EventCallback<CartItemModel> OnItemRemoved { get; set; }
+	[Parameter] public CartItemModel SelectedCartItem { get; set; }
+
+	private string SelectedClass => SelectedCartItem == Item ? "selected-cart-item" : "";
+
+	private async Task ItemSelected()
+	{
+		await OnItemSelected.InvokeAsync(Item);
+	}
+	private async Task RemoveItem()
+	{
+		await OnItemRemoved.InvokeAsync(Item);
+	}
+}

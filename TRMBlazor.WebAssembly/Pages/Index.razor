@@ -1,12 +1,21 @@
-﻿@page "/"
+﻿@page "/profile"
 
 @inject ILocalStorageService LocalStorage
 @inject IApiHelper ApiHelper
 @inject ILoggedInUserModel LoggedInUserModel
 
-<div class="col-6">
-	<h1>Hello, @Username</h1>
+<h1>Sales Page</h1>
+
+<div class="container">
+	<div class="row">
+		<h2>Todo:</h2>
+		<ul>
+			<li>Make a profile page</li>
+			<li>Make a registration page</li>
+		</ul>
+	</div>
 </div>
+
 
 @code {
 	public string Username { get; set; } = "User";

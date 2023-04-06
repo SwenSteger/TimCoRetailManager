@@ -1,0 +1,14 @@
+﻿.list-group-wrapper {
+	min-height: 300px;
+	display: flex;
+	border: 1px solid #dee2e6;
+	border-radius: .25rem;
+	overflow-y: auto;
+}
+
+.flex-container {
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}

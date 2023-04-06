@@ -1,5 +1,57 @@
-﻿@page "/sales"
-<h3>SalesPage</h3>
+﻿@page "/"
+
+
+<h1>Sales Page</h1>
+
+<div class="container">
+    <div class="row">
+        <!-- Column 0 -->
+        <div class="col-md-5">
+	        <h2>Items</h2>
+	        <div class="list-group-wrapper d-flex flex-column">
+		        <div class="list-group">
+			        @foreach (var product in Products)
+			        {
+				        <ProductListItem Product="product" OnProductSelected="(p => SelectedProduct = p)" SelectedProduct="SelectedProduct" />
+			        }
+		        </div>
+	        </div>
+        </div>
+        
+		<!-- Column 1 -->
+		<div class="col-md-2">
+		    <div class="flex-container">
+		        <div class="form-group">
+		            <label for="itemQuantity">Quantity</label>
+		            <input id="itemQuantity" class="form-control" type="number" min="1" @bind="ItemQuantity" />
+		        </div>
+		        <button class="btn btn-primary mt-5" @onclick="AddToCart" disabled="@(!CanAddToCart)">Add to Cart</button>
+		    </div>
+		</div>
+
+        <!-- Column 2 -->
+        <div class="col-md-5">
+		    <h2>Cart</h2>
+		    <div class="list-group-wrapper d-flex flex-column">
+		        <ul class="list-group">
+		            @foreach (var item in Cart)
+		            {
+			            <CartItem Item="item" OnItemRemoved="() => RemoveFromCart(item)" OnItemSelected="(i => SelectedCartItem = i)" SelectedCartItem="SelectedCartItem" />
+		            }
+		        </ul>
+		    </div>
+			<dl class="row mt-2">
+			    <dt class="col-sm-6">Sub-Total:</dt>
+			    <dd class="col-sm-6 right-aligned">@SubTotal.ToString("C")</dd>
+			    <dt class="col-sm-6">Tax:</dt>
+			    <dd class="col-sm-6 right-aligned">@Tax.ToString("C")</dd>
+			    <dt class="col-sm-6">Total:</dt>
+			    <dd class="col-sm-6 right-aligned">@Total.ToString("C")</dd>
+			</dl>
+            <button class="btn btn-success" @onclick="CheckOut" disabled="@(!CanCheckOut)">Check Out</button>
+        </div>
+    </div>
+</div>
 
 @code {
 

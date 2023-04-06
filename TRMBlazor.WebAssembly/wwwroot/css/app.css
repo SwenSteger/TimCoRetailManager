@@ -69,6 +69,35 @@ a:hover {
 	color: #d34b48;
 }
 
+/* LIST GROUP */
+.right-aligned {
+	text-align: right;
+}
+.selected-product,
+.selected-cart-item {
+	background-color: #f5f1f0;
+}
+.selected-product.product-list-item:hover,
+.selected-cart-item.cart-item:hover {
+	background-color: #f5f1f0;
+}
+.product-list-item:hover,
+.cart-item:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.025);
+}
+
+.message-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: calc(100vh - 120px); /* Adjust the height according to your header height */
+	/* position: absolute; */
+	top: 56px; /* Adjust the top offset according to your header height */
+}
+
+
 /* NAV */
 .nav-link {
 	font-family: 'Saira Condensed', sans-serif;

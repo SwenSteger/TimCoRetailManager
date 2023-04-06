@@ -1,0 +1,25 @@
+﻿@inherits ComponentBase
+@using TRMFrontEnd.Library.Models
+
+<div class="list-group-item product-list-item @SelectedClass" @onclick="SelectProduct">
+	<h5 class="mb-1">@Product.ProductName</h5>
+	<div class="d-flex flex-row justify-content-between">
+		<small>Price: @Product.RetailPrice.ToString("C")</small>
+		<small>Stock: @Product.QuantityInStock</small>
+	</div>
+</div>
+
+
+
+@code {
+	[Parameter] public ProductModel Product { get; set; }
+	[Parameter] public EventCallback<ProductModel> OnProductSelected { get; set; }
+	[Parameter] public ProductModel SelectedProduct { get; set; }
+	
+	private string SelectedClass => SelectedProduct == Product ? "selected-product" : "";
+	
+	private async Task SelectProduct()
+	{
+		await OnProductSelected.InvokeAsync(Product);
+	}
+}
