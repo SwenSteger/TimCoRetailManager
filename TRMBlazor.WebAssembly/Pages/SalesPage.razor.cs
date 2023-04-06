@@ -28,6 +28,12 @@ public partial class SalesPage : ComponentBase
 	{
 		await LoadProducts();
 	}
+	
+	private async Task ResetSalesViewModel()
+	{
+		Cart.Clear();
+		await LoadProducts();
+	}
 
 	public async Task LoadProducts()
 	{
@@ -68,7 +74,17 @@ public partial class SalesPage : ComponentBase
 	}
 
 	public bool CanRemoveFromCart => Cart.Any();
-	public void RemoveFromCart(CartItemModel item)
+	public bool CanRemoveSelectedFromCart => Cart.Any() && SelectedCartItem?.QuantityInCart > 0;
+
+	public void RemoveFromCart()
+	{
+		SelectedCartItem.Product.QuantityInStock += 1;
+		SelectedCartItem.QuantityInCart -= 1;
+		if (SelectedCartItem.QuantityInCart < 1)
+			Cart.Remove(SelectedCartItem);
+	}
+
+	public void RemoveSelectedFromCart(CartItemModel item)
 	{
 		item.Product.QuantityInStock += item.QuantityInCart;
 		Cart.Remove(item);
@@ -89,5 +105,7 @@ public partial class SalesPage : ComponentBase
 		}
 
 		await SaleEndpoint.PostSale(sale);
+		
+		await ResetSalesViewModel();
 	}
 }

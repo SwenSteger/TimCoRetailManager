@@ -5,20 +5,7 @@
 }
 
 /* BUTTON - PRIMARY */ 
-.btn-primary {
-	color: white;
-	background-color: #b23330;
-	border: 0 solid #b23330;
-}
-.btn-primary:hover {
-	border: 0 solid #d34b48;
-}
-.btn:focus,
-.btn:active:focus {
-	border-width: 0;
-}
-.btn:focus,
-.btn:active:focus,
+
 .btn-link.nav-link:focus {
 	background-color: #b23330;
 	border-color: #b23330;

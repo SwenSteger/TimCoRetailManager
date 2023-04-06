@@ -25,7 +25,8 @@
 		            <label for="itemQuantity">Quantity</label>
 		            <input id="itemQuantity" class="form-control" type="number" min="1" @bind="ItemQuantity" />
 		        </div>
-		        <button class="btn btn-primary mt-5" @onclick="AddToCart" disabled="@(!CanAddToCart)">Add to Cart</button>
+		        <button class="btn btn-success mt-5" @onclick="AddToCart" disabled="@(!CanAddToCart)">Add to Cart</button>
+		        <button class="btn btn-danger mt-5" @onclick="RemoveFromCart" disabled="@(!CanRemoveSelectedFromCart)">Remove 1 from Cart</button>
 		    </div>
 		</div>
 
@@ -36,7 +37,7 @@
 		        <ul class="list-group">
 		            @foreach (var item in Cart)
 		            {
-			            <CartItem Item="item" OnItemRemoved="() => RemoveFromCart(item)" OnItemSelected="(i => SelectedCartItem = i)" SelectedCartItem="SelectedCartItem" />
+			            <CartItem Item="item" OnItemRemoved="() => RemoveSelectedFromCart(item)" OnItemSelected="(i => SelectedCartItem = i)" SelectedCartItem="SelectedCartItem" />
 		            }
 		        </ul>
 		    </div>
