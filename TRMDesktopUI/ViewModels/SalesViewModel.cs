@@ -1,7 +1,11 @@
-﻿using Caliburn.Micro;
+﻿using System.Collections.Generic;
+using Caliburn.Micro;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using AutoMapper;
+using TRMDesktopUI.Models;
 using TRMFrontEnd.Library.Api;
 using TRMFrontEnd.Library.Helpers;
 using TRMFrontEnd.Library.Models;
@@ -13,12 +17,15 @@ namespace TRMDesktopUI.ViewModels
 		private readonly IProductEndpoint _productEndpoint;
 		private readonly IConfigHelper _configHelper;
 		private readonly ISaleEndpoint _saleEndpoint;
+		private readonly IMapper _mapper;
 
-		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndpoint saleEndpoint)
+		public SalesViewModel(IProductEndpoint productEndpoint, 
+			IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
 			_saleEndpoint = saleEndpoint;
+			_mapper = mapper;
 		}
 
 		protected override async void OnViewLoaded(object view)
@@ -30,11 +37,12 @@ namespace TRMDesktopUI.ViewModels
 		public async Task LoadProducts()
 		{
 			var productList = await _productEndpoint.GetAll();
-			Products = new BindingList<ProductModel>(productList);
+			var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+			Products = new BindingList<ProductDisplayModel>(products);
 		}
 
-		private BindingList<ProductModel> _products;
-		public BindingList<ProductModel> Products
+		private BindingList<ProductDisplayModel> _products;
+		public BindingList<ProductDisplayModel> Products
 		{
 			get => _products;
 			set
@@ -44,8 +52,8 @@ namespace TRMDesktopUI.ViewModels
 			}
 		}
 
-		private ProductModel _selectedProduct;
-		public ProductModel SelectedProduct
+		private ProductDisplayModel _selectedProduct;
+		public ProductDisplayModel SelectedProduct
 		{
 			get => _selectedProduct;
 			set
@@ -68,8 +76,8 @@ namespace TRMDesktopUI.ViewModels
 			}
 		}
 
-		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
-		public BindingList<CartItemModel> Cart
+		private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
+		public BindingList<CartItemDisplayModel> Cart
 		{
 			get => _cart;
 			set
@@ -80,20 +88,7 @@ namespace TRMDesktopUI.ViewModels
 		}
 
 		public string SubTotal => CalculateSubTotal().ToString("C");
-
-		private decimal CalculateSubTotal() 
-			=> Cart.Sum(item => (item.Product.RetailPrice * item.QuantityInCart));
-
 		public string Tax => CalculateTotalTax().ToString("C2");
-
-		private decimal CalculateTotalTax()
-		{
-			decimal taxRate = _configHelper.GetTaxRate() / 100;
-			return Cart
-				.Where(item => item.Product.IsTaxable)
-				.Sum(item => (item.Product.RetailPrice * item.QuantityInCart) * taxRate);
-		}
-
 		public string Total
 		{
 			get
@@ -101,6 +96,17 @@ namespace TRMDesktopUI.ViewModels
 				decimal total = CalculateSubTotal() + CalculateTotalTax();
 				return total.ToString("C2");
 			}
+		}
+
+		private decimal CalculateSubTotal() 
+			=> Cart.Sum(item => (item.Product.RetailPrice * item.QuantityInCart));
+
+		private decimal CalculateTotalTax()
+		{
+			decimal taxRate = _configHelper.GetTaxRate() / 100;
+			return Cart
+				.Where(item => item.Product.IsTaxable)
+				.Sum(item => (item.Product.RetailPrice * item.QuantityInCart) * taxRate);
 		}
 
 		public bool CanAddToCart 
@@ -112,13 +118,10 @@ namespace TRMDesktopUI.ViewModels
 			if (existingItem != null)
 			{
 				existingItem.QuantityInCart += ItemQuantity;
-				var index = Cart.IndexOf(existingItem);
-				Cart.Remove(existingItem);
-				Cart.Insert(index, existingItem);
 			}
 			else
 			{
-				var item = new CartItemModel
+				var item = new CartItemDisplayModel
 				{
 					Product = SelectedProduct,
 					QuantityInCart = ItemQuantity
@@ -134,12 +137,6 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
 			NotifyOfPropertyChange(() => CanCheckOut);
-
-			// Doesn't seem to update the QuantityInStock for the products list :(
-			var selectedItem = Products.FirstOrDefault(x => x == SelectedProduct);
-			if (selectedItem == null) return;
-			selectedItem.QuantityInStock = SelectedProduct.QuantityInStock;
-			NotifyOfPropertyChange(() => Products);
 		}
 
 		public bool CanRemoveFromCart
@@ -149,7 +146,7 @@ namespace TRMDesktopUI.ViewModels
 				bool output = false;
 
 				// Make sure something is selected
-
+				output = Cart.Any();
 				return output;
 			}
 		}

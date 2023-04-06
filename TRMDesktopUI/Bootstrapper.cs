@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using AutoMapper;
 using Caliburn.Micro;
 using Microsoft.Extensions.Configuration;
 using TRMDesktopUI.Helpers;
+using TRMDesktopUI.Models;
 using TRMDesktopUI.ViewModels;
 using TRMFrontEnd.Library.Api;
 using TRMFrontEnd.Library.Helpers;
@@ -29,8 +31,22 @@ namespace TRMDesktopUI
 				"PasswordChanged");
 		}
 
+		private IMapper ConfigureAutoMapper()
+		{
+			var autoMapperConfig = new MapperConfiguration(cfg =>
+			{
+				cfg.CreateMap<ProductModel, ProductDisplayModel>();
+				cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+			});
+
+			return autoMapperConfig.CreateMapper();
+		}
+
 		protected override void Configure()
 		{
+			var autoMapperConfig = ConfigureAutoMapper();
+
+			_container.Instance(autoMapperConfig);
 
 			_container.Instance(_container)
 				.PerRequest<IProductEndpoint, ProductEndpoint>()
