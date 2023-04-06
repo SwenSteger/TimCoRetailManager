@@ -1,8 +1,8 @@
 ﻿@using TRMBlazor.WebAssembly.Pages
-@inject IApiHelper ApiHelper
 @inject ILoggedInUserModel LoggedInUserModel
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <nav class="navbar navbar-expand navbar-dark bg-header">
 	<div class="container d-flex flex-row justify-content-between">
@@ -44,57 +44,38 @@
 	</div>
 </nav>
 
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Login</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <Login />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true" @ref="loginModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="loginModalLabel">Login</h5>
+				<button type="button" class="btn btn-danger p-0" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" style="padding-left: 8px; margin: 0 auto"><i class="oi oi-x"></i></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<Login/>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
-
-
 @code {
-	private string Username { get; set; } = "user";
-	private bool IsAuthenticated => LoggedInUserModel?.IsAuthenticated ?? false;
+	[Parameter] public bool IsAuthenticated { get; set; }
+	[Parameter] public string Username { get; set; }
+	
+	private ElementReference loginModal;
 
-    protected override async Task OnInitializedAsync()
-    {
-	    await ValidateToken();
-	    NavigationManager.LocationChanged += HandleLocationChanged;
-    }
-
-	private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+	private async Task CloseModal()
 	{
-		Console.WriteLine($"URL of new location: {e.Location}");
+		// await Task.Delay(500);
+		await JSRuntime.InvokeVoidAsync("bootstrap.Modal.getInstance", loginModal).ConfigureAwait(false);;
+		await JSRuntime.InvokeVoidAsync("loginModal.hide").ConfigureAwait(false);
 	}
-
-	public void Dispose()
-	{
-		NavigationManager.LocationChanged -= HandleLocationChanged;
-	}
-
-    private async Task ValidateToken()
-	{
-		var token = await LocalStorage.GetItemAsync<string>("authToken");
-		if (token != null)
-		{
-			await ApiHelper.GetLoggedInUserInfo(token);
-			Username = LoggedInUserModel.FirstName;
-		}
-	}
-
+	
     private async Task HandleLogout()
     {
 	    await LocalStorage.RemoveItemAsync("authToken");

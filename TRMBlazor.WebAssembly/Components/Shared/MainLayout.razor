@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 
 <div>
-	<Navigation />
+	<Navigation IsAuthenticated="@IsAuthenticated" Username="@Username" />
 
 	<main id="content-container" class="container content-container">
 		<article class="content px-4 bg-content">
@@ -40,10 +40,10 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await ValidateToken();
 		NavigationManager.LocationChanged += HandleLocationChanged;
 		
-		await Task.Delay(500);
+		await Task.Delay(1000); // Simulate loading time
+		await ValidateToken();
 		IsLoading = false;
 		StateHasChanged();
 	}
@@ -55,7 +55,7 @@
 		StateHasChanged();
 		
 		if (!e.IsNavigationIntercepted)
-			await Task.Delay(1000);
+			await Task.Delay(1000); // Simulate loading time
 		
 		IsLoading = false;
 		StateHasChanged();

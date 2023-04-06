@@ -1,0 +1,22 @@
+﻿.loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: calc(100vh - 56px);
+}
+
+.loading-message {
+	display: flex;
+	align-items: center;
+}
+
+.loading-message h2 {
+	margin-right: 0.5rem;
+}
+
+.spinner-border {
+	width: 1.6rem;
+	height: 1.6rem;
+	border-width: 0.2rem;
+	margin-bottom: 6px;
+}
