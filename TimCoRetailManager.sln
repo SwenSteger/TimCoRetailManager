@@ -11,11 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRMDesktopUI", "TRMDesktopU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRMDataManager.Library", "TRMDataManager.Library\TRMDataManager.Library.csproj", "{3685D6CB-9302-4288-8F3B-5EC6E941A027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRMDesktopUI.Library", "TRMDesktopUI.Library\TRMDesktopUI.Library.csproj", "{A05FC1C1-FABA-4FBF-8A43-00352D0E3DBF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRMFrontEnd.Library", "TRMFrontEnd.Library\TRMFrontEnd.Library.csproj", "{C8BE6EB9-ED44-4917-9792-0C2ECF364299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRMBlazor.WebAssembly", "TRMBlazor.WebAssembly\TRMBlazor.WebAssembly.csproj", "{48054636-14BD-471B-BEAF-CE7C2FE2AFD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRMBlazor.WebAssembly", "TRMBlazor.WebAssembly\TRMBlazor.WebAssembly.csproj", "{48054636-14BD-471B-BEAF-CE7C2FE2AFD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{3685D6CB-9302-4288-8F3B-5EC6E941A027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3685D6CB-9302-4288-8F3B-5EC6E941A027}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3685D6CB-9302-4288-8F3B-5EC6E941A027}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A05FC1C1-FABA-4FBF-8A43-00352D0E3DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A05FC1C1-FABA-4FBF-8A43-00352D0E3DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A05FC1C1-FABA-4FBF-8A43-00352D0E3DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A05FC1C1-FABA-4FBF-8A43-00352D0E3DBF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8BE6EB9-ED44-4917-9792-0C2ECF364299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8BE6EB9-ED44-4917-9792-0C2ECF364299}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8BE6EB9-ED44-4917-9792-0C2ECF364299}.Release|Any CPU.ActiveCfg = Release|Any CPU
