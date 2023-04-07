@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Caliburn.Micro;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using AutoMapper;
 using TRMDesktopUI.Models;
@@ -18,20 +21,48 @@ namespace TRMDesktopUI.ViewModels
 		private readonly IConfigHelper _configHelper;
 		private readonly ISaleEndpoint _saleEndpoint;
 		private readonly IMapper _mapper;
+		private readonly StatusInfoViewModel _status;
+		private readonly IWindowManager _window;
 
 		public SalesViewModel(IProductEndpoint productEndpoint, 
-			IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper)
+			IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper,
+			StatusInfoViewModel status, IWindowManager window)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
 			_saleEndpoint = saleEndpoint;
 			_mapper = mapper;
+			_status = status;
+			_window = window;
 		}
 
 		protected override async void OnViewLoaded(object view)
 		{
 			base.OnViewLoaded(view);
-			await LoadProducts();
+			try
+			{
+				await LoadProducts();
+			}
+			catch (Exception e)
+			{
+				dynamic settings = new ExpandoObject();
+				settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+				settings.ResizeMode = ResizeMode.NoResize;
+				settings.Title = "System Error - Unauthorized Access";
+
+				if (e.Message == "Unauthorized")
+				{
+					_status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the Sales form.");
+					await _window.ShowDialogAsync(_status, null, settings);
+				}
+				else
+				{
+					_status.UpdateMessage("Fatal Exception", e.Message);
+					await _window.ShowDialogAsync(_status, null, settings);
+				}
+
+				await TryCloseAsync();
+			}
 		}
 
 		private async Task ResetSalesViewModel()
