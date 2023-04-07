@@ -12,6 +12,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
     {
 	    private IDbConnection _sqlConnection;
 	    private IDbTransaction _transaction;
+	    private bool _isClosed = false;
 
 		public string GetConnectionString(string name)
 	    {
@@ -40,28 +41,15 @@ namespace TRMDataManager.Library.Internal.DataAccess
 		    }
 	    }
 
-		// Open Connection, Begin Transaction
 		public void StartTransaction(string connectionStringName)
 		{
 			string connectionString = GetConnectionString(connectionStringName);
 			_sqlConnection = new SqlConnection(connectionString);
 			_sqlConnection.Open();
 			_transaction = _sqlConnection.BeginTransaction();
+			_isClosed = false;
 		}
 
-		// Close Connection, Stop Transaction
-		public void CommitTransaction()
-		{
-			_transaction?.Commit();
-			_sqlConnection?.Close();
-		}
-		public void	RollbackTransaction() 
-		{
-			_transaction?.Rollback();
-			_sqlConnection?.Close();
-		}
-
-		// Load using the transaction
 		public List<T> LoadDataInTransaction<T, T2>(string storedProcedure, T2 parameters)
 		{
 			List<T> rows = _sqlConnection.Query<T>(storedProcedure, parameters, 
@@ -69,17 +57,46 @@ namespace TRMDataManager.Library.Internal.DataAccess
 			return rows;
 		}
 
-		// Save using the transaction
 		public void SaveDataInTransaction<T>(string storedProcedure, T parameters)
 		{
 			_sqlConnection.Execute(storedProcedure, parameters, 
 				commandType: CommandType.StoredProcedure, transaction: _transaction);
 		}
-		// Dispose
+
+		public void CommitTransaction()
+		{
+			_transaction?.Commit();
+			CloseConnection();
+		}
+
+		public void RollbackTransaction()
+		{
+			_transaction?.Rollback();
+			CloseConnection();
+		}
 
 		public void Dispose()
 		{
-			CommitTransaction();
+			if (_isClosed == false)
+			{
+				try
+				{
+					CommitTransaction();
+				}
+				catch
+				{
+					// TODO - Log this issue
+				}
+			}
+
+			_transaction = null;
+			_sqlConnection = null;
 		}
-    }
+
+		public void CloseConnection()
+		{
+			_sqlConnection?.Close();
+			_isClosed = true;
+		}
+	}
 }
