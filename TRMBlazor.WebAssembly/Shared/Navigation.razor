@@ -1,4 +1,5 @@
 ﻿@using TRMBlazor.WebAssembly.Pages
+@inject IApiHelper ApiHelper
 @inject ILoggedInUserModel LoggedInUserModel
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
@@ -72,13 +73,14 @@
 	private async Task CloseModal()
 	{
 		// await Task.Delay(500);
-		await JSRuntime.InvokeVoidAsync("bootstrap.Modal.getInstance", loginModal).ConfigureAwait(false);;
-		await JSRuntime.InvokeVoidAsync("loginModal.hide").ConfigureAwait(false);
+		// await JSRuntime.InvokeVoidAsync("bootstrap.Modal.getInstance", loginModal).ConfigureAwait(false);;
+		// await JSRuntime.InvokeVoidAsync("loginModal.hide").ConfigureAwait(false);
 	}
 	
     private async Task HandleLogout()
     {
 	    await LocalStorage.RemoveItemAsync("authToken");
+		ApiHelper.Logout();
 	    LoggedInUserModel = null;
 	    NavigationManager.NavigateTo("/", true, true);
     }

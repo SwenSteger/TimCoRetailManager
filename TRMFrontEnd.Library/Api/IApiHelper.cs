@@ -7,6 +7,7 @@ namespace TRMFrontEnd.Library.Api
 	public interface IApiHelper
 	{
 		HttpClient ApiClient { get; }
+		void Logout();
 		Task<AuthenticatedUser> Authenticate(string username, string password);
 		Task GetLoggedInUserInfo(string token);
 	}
