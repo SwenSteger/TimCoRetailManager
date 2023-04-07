@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\SaleHistoryPage.razor" />
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\dist\bootstrap.min.css" />
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\dist\bootstrap.min.css.map" />
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\dist\css\bootstrap-grid.css" />
@@ -190,6 +191,10 @@
       <Content Update="Shared\MainLayout.razor">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Pages\SaleHistoryPage.razor" />
     </ItemGroup>
 
 </Project>

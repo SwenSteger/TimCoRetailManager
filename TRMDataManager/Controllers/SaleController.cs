@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using TRMDataManager.Library.DataAccess;
@@ -9,13 +10,19 @@ namespace TRMDataManager.Controllers
     [Authorize]
     public class SaleController : ApiController
 	{
-        // POST api/<controller>
         public void Post(SaleModel sale)
         {
 	        SaleData  data = new SaleData();
             var userId = RequestContext.Principal.Identity.GetUserId();
 
             data.SaveSale(sale, userId);
+		}
+
+        [Route("GetSalesReport")]
+        public List<SaleReportModel> GetSalesReport()
+        {
+			SaleData data = new SaleData();
+			return data.GetSaleReport();
 		}
     }
 }
