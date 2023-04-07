@@ -8,3 +8,9 @@
 	margin: 60px 0 30px 0;
 	flex-grow: 0;
 }
+
+@media (min-width: 992px) {
+	.bg-content {
+		margin: 60px 0 30px 0;
+	}
+}

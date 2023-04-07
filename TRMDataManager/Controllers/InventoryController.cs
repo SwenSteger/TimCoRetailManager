@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using TRMDataManager.Library.DataAccess;
 using TRMDataManager.Library.Models;
@@ -12,15 +8,17 @@ namespace TRMDataManager.Controllers
     [Authorize]
     public class InventoryController : ApiController
     {
-	    public List<InventoryModel> Get()
+	    [Authorize(Roles = "Manager,Admin")]
+		public List<InventoryModel> Get()
 	    {
-			InventoryData data = new InventoryData();
+			var data = new InventoryData();
 			return data.GetInventory();
 		}
 
-	    public void Post(InventoryModel item)
+		[Authorize(Roles = "Admin")]
+		public void Post(InventoryModel item)
 	    {
-			InventoryData data = new InventoryData();
+			var data = new InventoryData();
 			data.SaveInventoryRecord(item);
 		}
     }

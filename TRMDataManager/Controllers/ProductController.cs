@@ -6,7 +6,7 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
-	[Authorize]
+	[Authorize(Roles = "Cashier")]
 	[Route("api/product")]
     public class ProductController : ApiController
 	{

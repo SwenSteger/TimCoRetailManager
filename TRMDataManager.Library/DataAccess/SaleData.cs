@@ -10,7 +10,6 @@ namespace TRMDataManager.Library.DataAccess
 		public void SaveSale(SaleModel saleInfo, string cashierId)
 		{
 			// TODO: Make this SOLID/DRY/Better
-			// Star filling in the sale detail models we will save to the database
 			List<SaleDetailDbModel> details = new List<SaleDetailDbModel>();
 			ProductData products = new ProductData();
 			var taxRate = ConfigHelper.GetTaxRate() / 100;
