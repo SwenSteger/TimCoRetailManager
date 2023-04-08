@@ -73,23 +73,21 @@
 
 	private DotNetObjectReference<Navigation> _objectReference;
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
+
+	protected override async Task OnInitializedAsync()
 	{
-		if (firstRender)
-		{
-			_objectReference = DotNetObjectReference.Create(this);
-			await LoadJSInterop();
-		}
+		JsInteropEvents.OnJsRuntimeReady += LoadJSInterop;
 	}
 
 	private async Task LoadJSInterop()
 	{
-		await Task.Delay(100);
+		_objectReference = DotNetObjectReference.Create(this);
 		await JSRuntime.InvokeVoidAsync("clearModalErrorMessage", _objectReference);
 	}
-	
+
 	public void Dispose()
 	{
+		JsInteropEvents.OnJsRuntimeReady -= LoadJSInterop;
 		_objectReference?.Dispose();
 	}
 

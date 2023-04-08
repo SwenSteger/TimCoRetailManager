@@ -1,4 +1,10 @@
-﻿window.clearModalErrorMessage = (dotnetHelper) => {
+﻿// Let's listen for DOM-Loading to be completed and fire an event to let 
+// JSInterop know that we're ready to run JSInterop calls.
+document.addEventListener("DOMContentLoaded", function() {
+	DotNet.invokeMethodAsync("TRMBlazor.WebAssembly", "JsRuntimeReady");
+});
+
+window.clearModalErrorMessage = (dotnetHelper) => {
 	$('#loginModal').on('show.bs.modal', function () {
 		$(this).on('hidden.bs.modal', function () {
 			dotnetHelper.invokeMethodAsync('ClearErrorMessage');
