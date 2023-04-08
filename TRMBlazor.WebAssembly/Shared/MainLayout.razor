@@ -50,7 +50,6 @@
 
 	private async void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
 	{
-		Console.WriteLine($"URL of new location: {e.Location}");
 		IsLoading = true;
 		StateHasChanged();
 		
@@ -61,19 +60,25 @@
 		StateHasChanged();
 	}
 
-	public void Dispose()
-	{
-		NavigationManager.LocationChanged -= HandleLocationChanged;
-	}
-
 	private async Task ValidateToken()
 	{
 		var token = await LocalStorage.GetItemAsync<string>("authToken");
 		if (token != null)
 		{
 			await ApiHelper.GetLoggedInUserInfo(token);
-			Username = LoggedInUserModel.FirstName;
+			if (LoggedInUserModel.IsAuthenticated)
+				Username = LoggedInUserModel.FirstName;
+			else
+			{
+				await LocalStorage.RemoveItemAsync("authToken");
+				NavigationManager.NavigateTo("/", true, true);
+			}
 		}
+	}
+
+	public void Dispose()
+	{
+		NavigationManager.LocationChanged -= HandleLocationChanged;
 	}
 }
 

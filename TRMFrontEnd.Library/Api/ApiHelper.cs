@@ -37,6 +37,7 @@ namespace TRMFrontEnd.Library.Api
 
 		public async Task<AuthenticatedUser> Authenticate(string username, string password)
 		{
+			// TODO: Add error handling that throws proper HttpRequestExceptions
 			var data = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("grant_type", "password"),

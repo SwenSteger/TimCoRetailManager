@@ -37,6 +37,11 @@ namespace TRMDesktopUI.ViewModels
 
 		public bool IsLoggedIn => !string.IsNullOrWhiteSpace(_user.Token);
 
+		public void UserManagement()
+		{
+			ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
+		}
+
 		public async Task LogOut()
 		{
 			_user.LogOffUser();

@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using System.Net
 @inject IApiHelper ApiHelper
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
@@ -36,17 +37,26 @@
 			ErrorMessage = "Username and password are required";
 			return;
 		}
-		
-		var result = await ApiHelper.Authenticate(Username, Password);
-		if (result != null)
+
+		try
 		{
-			await LocalStorage.SetItemAsync("authToken", result.Access_Token);
-			await ApiHelper.GetLoggedInUserInfo(result.Access_Token);
-			NavigationManager.NavigateTo("/", true, true);
+			// TODO: Add error handling that throws proper HttpRequestExceptions
+			var result = await ApiHelper.Authenticate(Username, Password);
+			if (result != null)
+			{
+				await LocalStorage.SetItemAsync("authToken", result.Access_Token);
+				await ApiHelper.GetLoggedInUserInfo(result.Access_Token);
+				NavigationManager.NavigateTo("/", true, true);
+			}
 		}
-		else
+		catch (Exception ex)
 		{
-			ErrorMessage = "Invalid username or password";
+			if (ex.Message.Contains("Bad Request"))
+				ErrorMessage = "Invalid username or password";
+			else if (ex.Message.Contains("Failed to fetch"))
+				ErrorMessage = "Unable to connect to the authentication service. Please check your network connection and try again.";
+			else 
+				ErrorMessage = $"An error occurred while authenticating: {ex.Message}";
 		}
 	}
 }

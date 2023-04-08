@@ -70,13 +70,6 @@
 	
 	private ElementReference loginModal;
 
-	private async Task CloseModal()
-	{
-		// await Task.Delay(500);
-		// await JSRuntime.InvokeVoidAsync("bootstrap.Modal.getInstance", loginModal).ConfigureAwait(false);;
-		// await JSRuntime.InvokeVoidAsync("loginModal.hide").ConfigureAwait(false);
-	}
-	
     private async Task HandleLogout()
     {
 	    await LocalStorage.RemoveItemAsync("authToken");

@@ -41,12 +41,14 @@ builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddApiAuthorization();
 
 // DI
+builder.Services.AddTransient<IProductEndpoint, ProductEndpoint>();
+builder.Services.AddTransient<ISaleEndpoint, SaleEndpoint>();
+builder.Services.AddTransient<IUserEndpoint, UserEndpoint>();
+
 builder.Services.AddSingleton<Func<IConfiguration>>(() => builder.Configuration);
 builder.Services.AddSingleton<ILoggedInUserModel, LoggedInUserModel>();
 builder.Services.AddSingleton<IApiHelper, ApiHelper>();
 builder.Services.AddSingleton<IConfigHelper, ConfigHelper>();
-builder.Services.AddSingleton<IProductEndpoint, ProductEndpoint>();
-builder.Services.AddSingleton<ISaleEndpoint, SaleEndpoint>();
 
 
 await builder.Build().RunAsync();
