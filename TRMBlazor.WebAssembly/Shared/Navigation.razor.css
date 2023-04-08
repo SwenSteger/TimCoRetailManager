@@ -46,7 +46,7 @@
 
 /* WELCOME USER */
 .welcome_user {
-	font-family: 'Saira Condensed', sans-serif;
+	font-family: 'Ubunto Mono', sans-serif;
 	font-size: 1em;
 	font-weight: 500;
 	letter-spacing: 2px;
@@ -63,7 +63,7 @@
 .code-word {
 	content: 'code';
 	color: #FFF;
-	font-family: 'Saira Condensed', sans-serif;
+	font-family: 'Ubunto Mono', sans-serif;
 	font-size: 1.1em;
 	font-weight: lighter;
 	letter-spacing: .2em;

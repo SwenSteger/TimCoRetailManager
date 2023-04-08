@@ -1,13 +1,21 @@
 ﻿@using TRMBlazor.WebAssembly.Pages
 @inject ILoggedInUserModel LoggedInUserModel
+@inject IJSRuntime JSRuntime;
 
 @if (!LoggedInUserModel?.IsAuthenticated ?? true)
 {
 	<div class="login-message-container">
 		<div>
-			<h1 style="border-bottom: 2px solid #b4525e" class="pb-2">Welcome to TimCo RM</h1>
+			<h1 style="border-bottom: 2px solid #b4525e" class="pb-2">Welcome to TimCo Retail Manager</h1>
 			<p class="text-dark">A Blazor-powered Retail Management System</p>
-			<h4 class="p-5">Please log in to continue</h4>
+			<h4 class="p-5">Please <button type="button" class="btn btn-danger" @onclick="OpenLoginModalAsync">log-in</button> to continue</h4>
 		</div>
 	</div>
+}
+
+@code {
+	private async Task OpenLoginModalAsync()
+	{
+		await JSRuntime.InvokeVoidAsync("openLoginModal");
+	}
 }

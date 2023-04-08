@@ -1,0 +1,26 @@
+﻿
+<div class="message-container">
+	<div>
+		<h1 style="border-bottom: 2px solid #b4525e" class="pb-2">Connection Error</h1>
+		@if (ExceptionObject != null)
+		{
+			<h5>@ExceptionObject.Message.Split(':').Last().Trim()</h5>
+			<p class="text-danger">
+				There was an issue connecting to the server. Please check your internet connection and try again.
+			</p>
+		}
+		else
+		{
+			<h2>Unknown Error</h2>
+			<p class="text-danger">
+				There was an unknown error connecting to the server. Please check your internet connection and try again.
+			</p>
+		}
+	</div>
+</div>
+
+
+@code {
+	[Parameter]
+	public Exception? ExceptionObject { get; set; }
+}

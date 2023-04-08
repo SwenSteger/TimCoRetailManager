@@ -50,15 +50,15 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="loginModalLabel">Login</h5>
-				<button type="button" class="btn btn-danger p-0" data-bs-dismiss="modal" aria-label="Close">
+				<button type="button" class="btn btn-danger p-0" data-bs-dismiss="modal" aria-label="Close" @onclick="ClearErrorMessage">
 					<span aria-hidden="true" style="padding-left: 8px; margin: 0 auto"><i class="oi oi-x"></i></span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<Login/>
+				<Login @ref="_loginComponent" ClearErrorMessageCallback="ClearErrorMessage" />
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" @onclick="ClearErrorMessage">Close</button>
 			</div>
 		</div>
 	</div>
@@ -69,6 +69,29 @@
 	[Parameter] public string Username { get; set; }
 	
 	private ElementReference loginModal;
+	private Login? _loginComponent;
+
+	private DotNetObjectReference<Navigation> _objectReference;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_objectReference = DotNetObjectReference.Create(this);
+			await LoadJSInterop();
+		}
+	}
+
+	private async Task LoadJSInterop()
+	{
+		await Task.Delay(100);
+		await JSRuntime.InvokeVoidAsync("clearModalErrorMessage", _objectReference);
+	}
+	
+	public void Dispose()
+	{
+		_objectReference?.Dispose();
+	}
 
     private async Task HandleLogout()
     {
@@ -77,4 +100,10 @@
 	    LoggedInUserModel = null;
 	    NavigationManager.NavigateTo("/", true, true);
     }
+	
+	[JSInvokable]
+	public void ClearErrorMessage()
+	{
+		_loginComponent?.ClearErrorMessage();
+	}
 }

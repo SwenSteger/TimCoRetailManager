@@ -1,0 +1,7 @@
+﻿h1 {
+	border-bottom: 2px solid #b4525e;
+	color: #9b3c47;
+}
+.message-container div {
+	max-width: 500px;
+}

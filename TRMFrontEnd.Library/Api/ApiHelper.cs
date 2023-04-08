@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TRMFrontEnd.Library.Exceptions;
 using TRMFrontEnd.Library.Models;
 
 namespace TRMFrontEnd.Library.Api
@@ -82,9 +83,14 @@ namespace TRMFrontEnd.Library.Api
 				}
 				else
 				{
-					throw new Exception(response.ReasonPhrase);
+					throw new ApiException(response.ReasonPhrase);
 				}
 			}
+		}
+		public async Task<string> PingServer()
+		{
+			using (var response = await _apiClient.GetAsync("/api/ping"))
+				return await response.Content.ReadAsStringAsync();
 		}
 	}
 }

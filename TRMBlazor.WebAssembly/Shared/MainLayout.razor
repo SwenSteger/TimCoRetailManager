@@ -1,10 +1,13 @@
-﻿@inherits LayoutComponentBase
+﻿@using TRMFrontEnd.Library.Exceptions
+@inherits LayoutComponentBase
 @inject IApiHelper ApiHelper
 @inject ILoggedInUserModel LoggedInUserModel
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
+
 <div>
+	<GlobalJsInteropInitializer />
 	<Navigation IsAuthenticated="@IsAuthenticated" Username="@Username" />
 
 	<main id="content-container" class="container content-container">
@@ -12,6 +15,10 @@
 			@if (IsLoading)
 			{
 				<Loading />
+			}
+			else if (HasConnectionError)
+			{
+				<ConnectionErrorMessage ExceptionObject="ExceptionObject" />
 			}
 			else if (NotFound)
 			{
@@ -34,7 +41,9 @@
 @code {
 	[CascadingParameter] public bool NotFound { get; set; }
 
+	private Exception? ExceptionObject { get; set; }
 	private bool IsLoading { get; set; } = true;
+	private bool HasConnectionError => ExceptionObject != null;
 	private string Username { get; set; } = "user";
 	private bool IsAuthenticated => LoggedInUserModel?.IsAuthenticated ?? false;
 
@@ -43,7 +52,7 @@
 		NavigationManager.LocationChanged += HandleLocationChanged;
 		
 		await Task.Delay(1000); // Simulate loading time
-		await ValidateToken();
+		await ValidateTokenAndHandleErrors();
 		IsLoading = false;
 		StateHasChanged();
 	}
@@ -56,27 +65,68 @@
 		if (!e.IsNavigationIntercepted)
 			await Task.Delay(1000); // Simulate loading time
 		
+		await ValidateTokenAndHandleErrors(); // Add this line to await the completion of this method
+		
 		IsLoading = false;
 		StateHasChanged();
 	}
 
-	private async Task ValidateToken()
+	private async Task ValidateTokenAndHandleErrors()
 	{
-		var token = await LocalStorage.GetItemAsync<string>("authToken");
-		if (token != null)
+		try
 		{
-			await ApiHelper.GetLoggedInUserInfo(token);
-			if (LoggedInUserModel.IsAuthenticated)
-				Username = LoggedInUserModel.FirstName;
-			else
+			await ApiHelper.PingServer(); // Add this line to check the connection to the server
+			await ValidateToken();
+			ExceptionObject = null;
+		}
+		catch (HttpRequestException exception)
+		{
+			if (exception.StatusCode == System.Net.HttpStatusCode.Unauthorized)
 			{
 				await LocalStorage.RemoveItemAsync("authToken");
 				NavigationManager.NavigateTo("/", true, true);
 			}
+			else
+			{
+				ExceptionObject = exception;
+			}
 		}
 	}
 
-	public void Dispose()
+
+	private async Task ValidateToken()
+	{
+		var token = await LocalStorage.GetItemAsync<string>("authToken");
+		try
+		{
+			await ApiHelper.GetLoggedInUserInfo(token);
+		}
+		catch (ApiException ex)
+		{
+			// Let's ignore Unauthorized exceptions from the server. We are clearly not logged in.
+			// We do this so we can fall-through to hit the <LoginMessage /> component.
+			if (ex.Message.Contains("Unauthorized"))
+				return;
+			
+			// Handle ApiException (e.g., show a message or log the error)
+			ExceptionObject = ex;
+		}
+		catch (Exception ex)
+		{
+			// Handle other exceptions (e.g., show a message or log the error)
+			ExceptionObject = ex;
+		}		
+		
+		if (LoggedInUserModel.IsAuthenticated)
+			Username = LoggedInUserModel.FirstName;
+		else
+		{
+			await LocalStorage.RemoveItemAsync("authToken");
+			NavigationManager.NavigateTo("/", true, true);
+		}
+	}
+
+	protected void Dispose()
 	{
 		NavigationManager.LocationChanged -= HandleLocationChanged;
 	}

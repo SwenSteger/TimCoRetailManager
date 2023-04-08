@@ -26,6 +26,8 @@
 <button type="submit" class="btn btn-primary" @onclick="HandleLogin">Login</button>
 
 @code {
+	[Parameter] public EventCallback ClearErrorMessageCallback { get; set; }
+	
 	private string Username { get; set; }
 	private string Password { get; set; }
 	private string ErrorMessage { get; set; }
@@ -58,5 +60,11 @@
 			else 
 				ErrorMessage = $"An error occurred while authenticating: {ex.Message}";
 		}
+	}
+	
+	public void ClearErrorMessage()
+	{
+		ErrorMessage = string.Empty;
+		StateHasChanged();
 	}
 }

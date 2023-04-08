@@ -197,4 +197,8 @@
       <UpToDateCheckInput Remove="Pages\SaleHistoryPage.razor" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Components\SalesPage" />
+    </ItemGroup>
+
 </Project>

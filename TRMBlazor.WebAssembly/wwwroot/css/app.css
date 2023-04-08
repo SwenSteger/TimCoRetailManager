@@ -11,46 +11,13 @@ $dark: #343A40;
  */
 
 html, body {
-	font-family: 'Saira Condensed', sans-serif;
+	font-family: 'Ubunto Mono', sans-serif;
 	font-size: 1.1em;
 	font-weight: 400;
 	min-height: 100%;
 	color: #363636;
 }
 
-/*
-body::before {
-    content: "N";
-    font-family: 'Saira Condensed', sans-serif;
-    font-size: 1800px;
-    font-weight: bold;
-    opacity: 0.1;
-    position: fixed;
-    top: -500px;
-    right: -350px;
-    transform: rotate(10deg) scaleX(120%);
-    z-index: -1;
-    color: #a31a0b90;
-	animation: fadeInBody 2.5s ease-in 1.5s backwards;
-}
-body::after {
-    content: "ngageonline";
-    font-family: 'Saira Condensed', sans-serif;
-    font-size: 300px;
-    font-weight: 900;
-    opacity: 0.1;
-    position: fixed;
-    top: 470px;
-    left: -500px;
-    transform: rotate(-90deg);
-    z-index: -1;
-    color: #AAAAAA60;
-    animation: fadeInBody 2.5s ease-in 1.5s backwards;
-}
-*/
-h1, h2, h3, h4, h5, h6 {
-	/*color: white;*/
-}
 h1:focus {
 	outline: none;
 }
@@ -92,15 +59,14 @@ a:hover {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	height: calc(100vh - 120px); /* Adjust the height according to your header height */
-	/* position: absolute; */
+	height: calc(100vh - 130px); /* Adjust the height according to your header height */
 	top: 56px; /* Adjust the top offset according to your header height */
 }
 
 
 /* NAV */
 .nav-link {
-	font-family: 'Saira Condensed', sans-serif;
+	font-family: 'Ubunto Mono', sans-serif;
 	font-size: 1em;
 	font-weight: 400;
 	letter-spacing: 1px;

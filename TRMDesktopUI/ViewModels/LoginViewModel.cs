@@ -8,7 +8,7 @@ namespace TRMDesktopUI.ViewModels
 {
 	public class LoginViewModel : Screen
 	{
-		private string _userName = "ngage";
+		private string _userName = "admin";
 		private string _password = "Psd123.";
 		private string _errorMessage;
 		private readonly IApiHelper _apiHelper;

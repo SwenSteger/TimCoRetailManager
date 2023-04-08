@@ -10,5 +10,6 @@ namespace TRMFrontEnd.Library.Api
 		void Logout();
 		Task<AuthenticatedUser> Authenticate(string username, string password);
 		Task GetLoggedInUserInfo(string token);
+		Task<string> PingServer();
 	}
 }
