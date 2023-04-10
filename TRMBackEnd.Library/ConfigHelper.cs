@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace TRMDataManager.Library
+namespace TRMBackEnd.Library
 {
 	public class ConfigHelper
 	{

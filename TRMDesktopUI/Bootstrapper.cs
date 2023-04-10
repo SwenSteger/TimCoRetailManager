@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +18,6 @@ namespace TRMDesktopUI
 	public class Bootstrapper : BootstrapperBase
 	{
 		private readonly SimpleContainer _container = new SimpleContainer();
-		private IConfigurationRoot _configuration;
 
 		public Bootstrapper()
 		{

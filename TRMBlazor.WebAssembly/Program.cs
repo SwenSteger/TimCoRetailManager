@@ -23,7 +23,7 @@ var apiSettings = new Dictionary<string, string>
 	{"api", "https://localhost:44361/"},
 	{"taxRate", "8.75"}
 };
-var memoryConfig = new MemoryConfigurationSource { InitialData = apiSettings };
+var memoryConfig = new MemoryConfigurationSource { InitialData = apiSettings! };
 builder.Configuration.Add(memoryConfig);
 
 // LocalStorage
@@ -41,14 +41,15 @@ builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddApiAuthorization();
 
 // DI
-builder.Services.AddTransient<IProductEndpoint, ProductEndpoint>();
-builder.Services.AddTransient<ISaleEndpoint, SaleEndpoint>();
-builder.Services.AddTransient<IUserEndpoint, UserEndpoint>();
+builder.Services
+	.AddTransient<IProductEndpoint, ProductEndpoint>()
+	.AddTransient<ISaleEndpoint, SaleEndpoint>()
+	.AddTransient<IUserEndpoint, UserEndpoint>();
 
-builder.Services.AddSingleton<Func<IConfiguration>>(() => builder.Configuration);
-builder.Services.AddSingleton<ILoggedInUserModel, LoggedInUserModel>();
-builder.Services.AddSingleton<IApiHelper, ApiHelper>();
-builder.Services.AddSingleton<IConfigHelper, ConfigHelper>();
-
+builder.Services
+	.AddSingleton<Func<IConfiguration>>(() => builder.Configuration)
+	.AddSingleton<ILoggedInUserModel, LoggedInUserModel>()
+	.AddSingleton<IApiHelper, ApiHelper>()
+	.AddSingleton<IConfigHelper, ConfigHelper>();
 
 await builder.Build().RunAsync();

@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
 
-namespace TRMDataManager.Library.Internal.DataAccess
+namespace TRMBackEnd.Library.Internal.DataAccess
 {
     internal class SqlDataAccess : IDisposable
     {

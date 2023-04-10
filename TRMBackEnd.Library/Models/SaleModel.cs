@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TRMDataManager.Library.Models
+namespace TRMBackEnd.Library.Models
 {
 	public class SaleModel
 	{

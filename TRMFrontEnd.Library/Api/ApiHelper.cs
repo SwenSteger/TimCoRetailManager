@@ -51,7 +51,7 @@ namespace TRMFrontEnd.Library.Api
 				if (response.IsSuccessStatusCode)
 				{
 					var result = await response.Content.ReadFromJsonAsync<AuthenticatedUser>();
-
+					
 					return result;
 				}
 				else

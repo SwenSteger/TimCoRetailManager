@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TRMDataManager.Library.Internal.DataAccess;
-using TRMDataManager.Library.Models;
+using TRMBackEnd.Library.Internal.DataAccess;
+using TRMBackEnd.Library.Models;
 
-namespace TRMDataManager.Library.DataAccess
+namespace TRMBackEnd.Library.DataAccess
 {
 	public class SaleData
 	{

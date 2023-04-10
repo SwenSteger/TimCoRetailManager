@@ -15,15 +15,15 @@ namespace TRMFrontEnd.Library.Helpers
 		// TODO: Move this from config to the API
 		public decimal GetTaxRate()
 		{
-			string rateText = _configuration["taxRate"];
-			if (rateText == null) 
-				throw new ConfigurationErrorsException("The Tax rate is not set up properly");
+			string rateText = _configuration["taxRate"] 
+			                  ?? throw new ConfigurationErrorsException("The Tax rate is not set up properly");
 
 			var isValidTaxRate = decimal.TryParse(rateText, out var output);
 			if (!isValidTaxRate)
 				throw new ConfigurationErrorsException("The Tax rate is not set up properly");
 
 			return output;
+
 		}
 	}
 }

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using TRMDataManager.Library.DataAccess;
-using TRMDataManager.Library.Models;
+using TRMBackEnd.Library.DataAccess;
+using TRMBackEnd.Library.Models;
 using TRMDataManager.Models;
 
 namespace TRMDataManager.Controllers

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TRMDataManager.Library.Models
+namespace TRMBackEnd.Library.Models
 {
 	public class UserModel
 	{
