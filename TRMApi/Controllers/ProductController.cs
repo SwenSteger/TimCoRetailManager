@@ -18,7 +18,7 @@ namespace TRMApi.Controllers
 			_config = config;
 		}
 
-		// GET: User/Details/5
+		[HttpGet]
 	    public List<ProductModel> Get()
 	    {
 		    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -8,11 +8,10 @@ namespace TRMDesktopUI.ViewModels
 {
 	public class LoginViewModel : Screen
 	{
-		private string _userName = "admin";
-		private string _password = "Psd123.";
-		private string _errorMessage;
 		private readonly IApiHelper _apiHelper;
 		private readonly IEventAggregator _events;
+
+		private string _errorMessage;
 
 		public LoginViewModel(IApiHelper apiHelper, IEventAggregator events)
 		{
@@ -20,6 +19,7 @@ namespace TRMDesktopUI.ViewModels
 			_events = events;
 		}
 
+		private string _userName = "admin";
 		public string UserName
 		{
 			get => _userName;
@@ -31,6 +31,7 @@ namespace TRMDesktopUI.ViewModels
 			}
 		}
 
+		private string _password = "Psd123.";
 		public string Password
 		{
 			get => _password;

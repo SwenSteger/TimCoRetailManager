@@ -20,7 +20,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 var apiSettings = new Dictionary<string, string>
 {
-	{"api", "https://localhost:44361/"},
+	{"api", "https://localhost:7035/"},
 	{"taxRate", "8.75"}
 };
 var memoryConfig = new MemoryConfigurationSource { InitialData = apiSettings! };
@@ -47,6 +47,7 @@ builder.Services
 	.AddTransient<IUserEndpoint, UserEndpoint>();
 
 builder.Services
+	.AddSingleton<IConfiguration, Configuration>()
 	.AddSingleton<Func<IConfiguration>>(() => builder.Configuration)
 	.AddSingleton<ILoggedInUserModel, LoggedInUserModel>()
 	.AddSingleton<IApiHelper, ApiHelper>()

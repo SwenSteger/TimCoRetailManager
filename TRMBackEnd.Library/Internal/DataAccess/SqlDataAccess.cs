@@ -24,7 +24,6 @@ namespace TRMBackEnd.Library.Internal.DataAccess
 		public string GetConnectionString(string name)
 		{
 			return _config.GetConnectionString(name);
-		    //return ConfigurationManager.ConnectionStrings[name].ConnectionString;
 	    }
 
 	    public List<T> LoadData<T, T2>(string storedProcedure, T2 parameters, string connectionStringName)

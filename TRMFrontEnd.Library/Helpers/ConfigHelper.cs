@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace TRMFrontEnd.Library.Helpers
 {
@@ -11,19 +11,18 @@ namespace TRMFrontEnd.Library.Helpers
 		{
 			_configuration = configuration;
 		}
-		
-		// TODO: Move this from config to the API
+
 		public decimal GetTaxRate()
 		{
-			string rateText = _configuration["taxRate"] 
-			                  ?? throw new ConfigurationErrorsException("The Tax rate is not set up properly");
+			string rateText = _configuration["taxRate"];
+			if (string.IsNullOrWhiteSpace(rateText))
+				throw new ConfigurationErrorsException("The Tax rate is not set up properly");
 
 			var isValidTaxRate = decimal.TryParse(rateText, out var output);
 			if (!isValidTaxRate)
 				throw new ConfigurationErrorsException("The Tax rate is not set up properly");
 
 			return output;
-
 		}
 	}
 }
