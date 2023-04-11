@@ -11,10 +11,17 @@ namespace TRMApi.Controllers
     [Route("api/[controller]")]
     public class SaleController : ControllerBase
 	{
+		private readonly IConfiguration _config;
+
+		public SaleController(IConfiguration config)
+		{
+			_config = config;
+		}
+		
 		[Authorize(Roles = "Cashier")]
 		public void Post(SaleModel sale)
         {
-	        var  data = new SaleData();
+	        var  data = new SaleData(_config);
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             data.SaveSale(sale, userId);
@@ -33,7 +40,7 @@ namespace TRMApi.Controllers
 			// 	// Do manager stuff
 	  //       }
 
-			var data = new SaleData();
+			var data = new SaleData(_config);
 			return data.GetSaleReport();
 		}
     }

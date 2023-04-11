@@ -5,18 +5,26 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace TRMBackEnd.Library.Internal.DataAccess
 {
     internal class SqlDataAccess : IDisposable
     {
+	    private readonly IConfiguration _config;
 	    private IDbConnection _sqlConnection;
 	    private IDbTransaction _transaction;
 	    private bool _isClosed = false;
 
-		public string GetConnectionString(string name)
+	    public SqlDataAccess(IConfiguration config)
 	    {
-		    return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+		    _config = config;
+
+	    }
+		public string GetConnectionString(string name)
+		{
+			return _config.GetConnectionString(name);
+		    //return ConfigurationManager.ConnectionStrings[name].ConnectionString;
 	    }
 
 	    public List<T> LoadData<T, T2>(string storedProcedure, T2 parameters, string connectionStringName)
