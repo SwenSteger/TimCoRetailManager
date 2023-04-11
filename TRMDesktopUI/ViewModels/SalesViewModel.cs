@@ -6,7 +6,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using AutoMapper;
 using TRMDesktopUI.Models;
 using TRMFrontEnd.Library.Api;
@@ -65,6 +64,12 @@ namespace TRMDesktopUI.ViewModels
 			}
 		}
 
+		public async Task LoadProducts()
+		{
+			var productList = await _productEndpoint.GetAll();
+			var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+			Products = new BindingList<ProductDisplayModel>(products);
+		}
 		private async Task ResetSalesViewModel()
 		{
 			Cart = new BindingList<CartItemDisplayModel>();
@@ -75,12 +80,6 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
 			NotifyOfPropertyChange(() => CanCheckOut);
-		}
-		public async Task LoadProducts()
-		{
-			var productList = await _productEndpoint.GetAll();
-			var products = _mapper.Map<List<ProductDisplayModel>>(productList);
-			Products = new BindingList<ProductDisplayModel>(products);
 		}
 
 		private BindingList<ProductDisplayModel> _products;
@@ -152,7 +151,6 @@ namespace TRMDesktopUI.ViewModels
 
 		private decimal CalculateSubTotal() 
 			=> Cart.Sum(item => (item.Product.RetailPrice * item.QuantityInCart));
-
 		private decimal CalculateTotalTax()
 		{
 			decimal taxRate = _configHelper.GetTaxRate() / 100;
@@ -163,7 +161,6 @@ namespace TRMDesktopUI.ViewModels
 
 		public bool CanAddToCart 
 			=> ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity;
-
 		public void AddToCart()
 		{
 			var existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
@@ -182,7 +179,6 @@ namespace TRMDesktopUI.ViewModels
 				Cart.Add(item);
 			}
 
-
 			SelectedProduct.QuantityInStock -= ItemQuantity;
 			ItemQuantity = 1;
 			NotifyOfPropertyChange(() => SubTotal);
@@ -192,7 +188,6 @@ namespace TRMDesktopUI.ViewModels
 		}
 
 		public bool CanRemoveFromCart => SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0;
-
 		public void RemoveFromCart()
 		{
 			SelectedCartItem.Product.QuantityInStock += 1;
@@ -210,7 +205,6 @@ namespace TRMDesktopUI.ViewModels
 		}
 
 		public bool CanCheckOut => Cart.Any();
-
 		public async Task CheckOut()
 		{
 			// create a SaleModel and post to api
@@ -226,7 +220,6 @@ namespace TRMDesktopUI.ViewModels
 			}
 
 			await _saleEndpoint.PostSale(sale);
-
 			await ResetSalesViewModel();
 		}
 	}

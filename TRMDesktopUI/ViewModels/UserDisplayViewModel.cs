@@ -97,7 +97,6 @@ namespace TRMDesktopUI.ViewModels
 			}
 		}
 
-
 		public UserDisplayViewModel(StatusInfoViewModel status, IWindowManager window, IUserEndpoint userEndpoint)
 		{
 			_status = status;
@@ -139,16 +138,12 @@ namespace TRMDesktopUI.ViewModels
 			var productList = await _userEndpoint.GetAll();
 			Users = new BindingList<UserModel>(productList);
 		}
-
 		private async Task LoadRoles()
 		{
 			var roles = await _userEndpoint.GetAllRoles();
-
-			foreach (var role in roles)
-			{
-				if (UserRoles.IndexOf(role.Value) < 0) 
-					AvailableRoles.Add(role.Value);
-			}
+			foreach (var role in roles
+				         .Where(role => UserRoles.IndexOf(role.Value) < 0)) 
+				AvailableRoles.Add(role.Value);
 		}
 
 		public async Task AddSelectedRole()

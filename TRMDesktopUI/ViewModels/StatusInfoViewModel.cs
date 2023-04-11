@@ -16,9 +16,7 @@ namespace TRMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => Message);
 		}
 
-		public void Close()
-		{
-			TryCloseAsync();
-		}
+		public void Close() 
+			=> TryCloseAsync();
 	}
 }
