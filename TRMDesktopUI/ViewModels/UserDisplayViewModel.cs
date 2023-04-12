@@ -135,8 +135,8 @@ namespace TRMDesktopUI.ViewModels
 
 		public async Task LoadUsers()
 		{
-			var productList = await _userEndpoint.GetAll();
-			Users = new BindingList<UserModel>(productList);
+			var users = await _userEndpoint.GetAll();
+			Users = new BindingList<UserModel>(users);
 		}
 		private async Task LoadRoles()
 		{

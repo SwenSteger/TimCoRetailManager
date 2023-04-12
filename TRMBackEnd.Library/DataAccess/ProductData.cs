@@ -6,28 +6,21 @@ using TRMBackEnd.Library.Models;
 
 namespace TRMBackEnd.Library.DataAccess
 {
-	public class ProductData
+	public class ProductData : IProductData
 	{
-		private readonly IConfiguration _config;
+		private readonly ISqlDataAccess _sqlDataAccess;
 
-		public ProductData(IConfiguration config)
+		public ProductData(ISqlDataAccess sqlDataAccess)
 		{
-			_config = config;
+			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public List<ProductModel> GetProducts()
-		{
-			var sql = new SqlDataAccess(_config);
-			var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "TRMData");
+		public List<ProductModel> GetProducts() 
+			=> _sqlDataAccess
+				.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "TRMData");
 
-			return output;
-		}
-
-		public ProductModel GetProductById(int productId)
-		{
-			var sql = new SqlDataAccess(_config);
-			var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new { Id = productId }, "TRMData").FirstOrDefault();
-			return output;
-		}
+		public ProductModel GetProductById(int productId) 
+			=> _sqlDataAccess
+				.LoadData<ProductModel, dynamic>("dbo.spProduct_GetById", new { Id = productId }, "TRMData").FirstOrDefault();
 	}
 }

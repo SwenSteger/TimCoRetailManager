@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.Owin.Cors;
 using TRMApi.Data;
+using TRMBackEnd.Library.DataAccess;
+using TRMBackEnd.Library.Internal.DataAccess;
 using CorsOptions = Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,15 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// Personal Services
+builder.Services
+	.AddTransient<ISqlDataAccess, SqlDataAccess>()
+	.AddTransient<IInventoryData, InventoryData>()
+	.AddTransient<IProductData, ProductData>()
+	.AddTransient<ISaleData, SaleData>()
+	.AddTransient<IUserData, UserData>();
+
 builder.Services.AddAuthentication(options =>
 {
 	options.DefaultAuthenticateScheme = "JwtBearer";

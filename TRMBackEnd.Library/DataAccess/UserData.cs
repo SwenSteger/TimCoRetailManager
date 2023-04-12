@@ -5,22 +5,19 @@ using TRMBackEnd.Library.Models;
 
 namespace TRMBackEnd.Library.DataAccess
 {
-	public class UserData
+	public class UserData : IUserData
 	{
-		private readonly IConfiguration _config;
+		private readonly ISqlDataAccess _sqlDataAccess;
 
-		public UserData(IConfiguration config)
+		public UserData(ISqlDataAccess sqlDataAccess)
 		{
-			_config = config;
+			_sqlDataAccess = sqlDataAccess;
 		}
 
 		public List<UserModel> GetUserById(string id)
 		{
-			var sql = new SqlDataAccess(_config);
-			var p = new { Id = id };
-			var output = sql.LoadData<UserModel, dynamic>("dbo.spUserLookup", p, "TRMData");
-			
-			return output;
+			return _sqlDataAccess
+				.LoadData<UserModel, dynamic>("dbo.spUserLookup", new { Id = id }, "TRMData");
 		}
 	}
 }

@@ -11,20 +11,15 @@ namespace TRMApi.Controllers
 	[Route("api/[controller]")]
     public class ProductController : ControllerBase
 	{
-		private readonly IConfiguration _config;
+		private readonly IProductData _productData;
 
-		public ProductController(IConfiguration config)
+		public ProductController(IProductData productData)
 		{
-			_config = config;
+			_productData = productData;
 		}
 
 		[HttpGet]
-	    public List<ProductModel> Get()
-	    {
-		    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		    var data = new ProductData(_config);
-
-		    return data.GetProducts();
-		}
+	    public List<ProductModel> Get() 
+		    => _productData.GetProducts();
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using TRMApi.Models;
 using TRMBackEnd.Library.DataAccess;
@@ -17,22 +16,21 @@ namespace TRMApi.Controllers
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<IdentityUser> _userManager;
-		private readonly IConfiguration _config;
+		private readonly IUserData _userData;
 
-		public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IConfiguration config)
+		public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUserData userData)
 		{
 			_context = context;
 			_userManager = userManager;
-			_config = config;
+			_userData = userData;
 		}
 		
         [HttpGet]
         public UserModel GetById()
         {
 	        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
-            var data = new UserData(_config);
 
-            return data.GetUserById(userId).First();
+            return _userData.GetUserById(userId).First();
         }
 
         [HttpGet]
@@ -43,9 +41,10 @@ namespace TRMApi.Controllers
 	        var output = new List<ApplicationUserModel>();
 
 	        var users = _context.Users.ToList();
-	        var userRoles = from userRole in _context.UserRoles
-											        join role in _context.Roles on userRole.RoleId equals role.Id
-											        select new { userRole.UserId, role.Name };
+	        var userRoles =
+		        from ur in _context.UserRoles
+		        join r in _context.Roles on ur.RoleId equals r.Id
+		        select new { ur.UserId, ur.RoleId, r.Name };
 
 	        foreach (var user in users)
 	        {
@@ -53,12 +52,13 @@ namespace TRMApi.Controllers
 		        {
 			        Id = user.Id,
 			        Email = user.Email,
-			        Roles = userRoles
-				        .Where(x => x.UserId == user.Id)
-				        .ToDictionary(x => x.UserId, x => x.Name)
+			        Roles = new Dictionary<string, string>()
 		        };
+		        userModel.Roles = userRoles
+			        .Where(x => x.UserId == user.Id)
+			        .ToDictionary(x => x.RoleId, x => x.Name);
 
-		        output.Add(userModel);
+				output.Add(userModel);
 	        }
 
 	        return output;
@@ -67,12 +67,9 @@ namespace TRMApi.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")]
         [Route("admin/getAllRoles")]
-        public Dictionary<string, string> GetAllRoles()
-        {
-	        var roles = _context.Roles.ToDictionary(x => x.Id, x => x.Name);
-	        return roles;
-        }
-        
+        public Dictionary<string, string> GetAllRoles() 
+	        => _context.Roles.ToDictionary(x => x.Id, x => x.Name);
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [Route("admin/AddToRole")]

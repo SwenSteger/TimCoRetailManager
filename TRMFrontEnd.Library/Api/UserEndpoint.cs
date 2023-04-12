@@ -18,7 +18,7 @@ namespace TRMFrontEnd.Library.Api
 
 		public async Task<List<UserModel>> GetAll()
 		{
-			using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("api/users/admin/getallusers"))
+			using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("api/user/admin/getallusers"))
 			{
 				if (response.IsSuccessStatusCode)
 				{
@@ -34,7 +34,7 @@ namespace TRMFrontEnd.Library.Api
 
 		public async Task<Dictionary<string, string>> GetAllRoles()
 		{
-			using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("api/users/admin/getallroles"))
+			using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("api/user/admin/getallroles"))
 			{
 				if (response.IsSuccessStatusCode)
 				{

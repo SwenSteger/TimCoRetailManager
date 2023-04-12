@@ -27,6 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRMBackEnd.Library", "TRMBa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRMApi", "TRMApi\TRMApi.csproj", "{F5E859DA-32FF-4909-B838-07A42736DBB8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoluctionItems", "SoluctionItems", "{4F7B842C-6776-46E8-B3C8-DFB807709897}"
+	ProjectSection(SolutionItems) = preProject
+		Roadmap.txt = Roadmap.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
