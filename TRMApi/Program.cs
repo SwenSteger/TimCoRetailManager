@@ -1,18 +1,16 @@
 using System.Text;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.Owin.Cors;
 using TRMApi.Data;
 using TRMBackEnd.Library.DataAccess;
 using TRMBackEnd.Library.Internal.DataAccess;
-using CorsOptions = Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var secretKey = builder.Configuration.GetValue<string>("Secrets:SecurityKey");
 var connectionString = builder.Configuration.GetConnectionString("TRMIdentity");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(connectionString));
@@ -47,7 +45,7 @@ builder.Services.AddAuthentication(options =>
 		ValidateIssuerSigningKey = true,
 		ClockSkew = TimeSpan.FromMinutes(5),
 		IssuerSigningKey =
-			new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Secrets:SecurityKey"))),
+			new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
 	};
 });
 

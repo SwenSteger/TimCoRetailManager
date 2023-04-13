@@ -12,11 +12,7 @@ namespace TRMBackEnd.Library
 		public Configuration()
 		{
 			_configuration = new ConfigurationBuilder()
-				.AddInMemoryCollection(new Dictionary<string, string>
-				{
-					{"api", "https://localhost:7035/"},
-					{"taxRate", "8.75"}
-				})
+				.AddJsonFile("appsettings.json")
 				.Build();
 		}
 		public IConfigurationSection GetSection(string key)

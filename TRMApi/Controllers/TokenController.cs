@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -15,11 +16,13 @@ namespace TRMApi.Controllers
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<IdentityUser> _userManager;
+		private readonly IConfiguration _configuration;
 
-		public TokenController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+		public TokenController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IConfiguration configuration)
 		{
 			_context = context;
 			_userManager = userManager;
+			_configuration = configuration;
 		}
 
 		[HttpPost]
@@ -50,10 +53,11 @@ namespace TRMApi.Controllers
 			foreach (var role in roles) 
 				claims.Add(new Claim(ClaimTypes.Role, role.Name));
 
+			var secret = _configuration["Secrets:SecurityKey"];
 			var token = new JwtSecurityToken(
 				new JwtHeader(
 					new SigningCredentials(
-						new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsASuperSecretKeyThatWillNeedToBeChanged")),
+						new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
 						SecurityAlgorithms.HmacSha256)),
 				new JwtPayload(claims));
 

@@ -52,7 +52,7 @@ namespace TRMFrontEnd.Library.Api
 		{
 			var data = new { UserId = userId, RoleName = roleName };
 			using (HttpResponseMessage response =
-			       await _apiHelper.ApiClient.PostAsJsonAsync("api/users/admin/AddToRole", data))
+			       await _apiHelper.ApiClient.PostAsJsonAsync("api/user/admin/AddToRole", data))
 			{
 				if (!response.IsSuccessStatusCode)
 					throw new Exception(response.ReasonPhrase);
@@ -63,7 +63,7 @@ namespace TRMFrontEnd.Library.Api
 		{
 			var data = new { UserId = userId, RoleName = roleName };
 			using (HttpResponseMessage response =
-			       await _apiHelper.ApiClient.PostAsJsonAsync("api/users/admin/RemoveFromRole", data))
+			       await _apiHelper.ApiClient.PostAsJsonAsync("api/user/admin/RemoveFromRole", data))
 			{
 				if (!response.IsSuccessStatusCode)
 					throw new Exception(response.ReasonPhrase);
