@@ -17,12 +17,15 @@ namespace TRMApi.Controllers
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<IdentityUser> _userManager;
 		private readonly IUserData _userData;
+		private readonly ILogger<UserController> _logger;
 
-		public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUserData userData)
+		public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, 
+			IUserData userData, ILogger<UserController> logger)
 		{
 			_context = context;
 			_userManager = userManager;
 			_userData = userData;
+			_logger = logger;
 		}
 		
         [HttpGet]
@@ -75,7 +78,12 @@ namespace TRMApi.Controllers
         [Route("admin/AddToRole")]
         public async Task AddToRole(UserRolePairModel userRolePair)
         {
-	        var user = await _userManager.FindByIdAsync(userRolePair.UserId);
+	        var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var user = await _userManager.FindByIdAsync(userRolePair.UserId);
+
+			_logger.LogInformation("Admin {Admin} added user {User} to role {Role}", 
+				loggedInUserId, user.Id, userRolePair.RoleName);
+
 	        await _userManager.AddToRoleAsync(user, userRolePair.RoleName);
 		}
         
@@ -84,8 +92,13 @@ namespace TRMApi.Controllers
         [Route("admin/RemoveFromRole")]
         public async Task RemoveFromRole(UserRolePairModel userRolePair)
         {
+	        var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	        var user = await _userManager.FindByIdAsync(userRolePair.UserId);
-	        await _userManager.RemoveFromRoleAsync(user, userRolePair.RoleName);
+
+	        _logger.LogInformation("Admin {Admin} removed user {User} from role {Role}",
+		        loggedInUserId, user.Id, userRolePair.RoleName);
+
+			await _userManager.RemoveFromRoleAsync(user, userRolePair.RoleName);
 		}
 	}
 }

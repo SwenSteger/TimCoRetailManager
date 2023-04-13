@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(options =>
 		ValidateIssuerSigningKey = true,
 		ClockSkew = TimeSpan.FromMinutes(5),
 		IssuerSigningKey =
-			new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsASuperSecretKeyThatWillNeedToBeChanged")),
+			new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Secrets:SecurityKey"))),
 	};
 });
 
