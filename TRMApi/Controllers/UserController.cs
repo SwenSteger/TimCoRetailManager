@@ -58,13 +58,13 @@ namespace TRMApi.Controllers
 			        .Where(x => x.UserId == user.Id)
 			        .ToDictionary(x => x.RoleId, x => x.Name);
 
-				output.Add(userModel);
+		        output.Add(userModel);
 	        }
 
-	        return output;
-        }
+			return output;
+		}
 
-        [HttpGet]
+		[HttpGet]
         [Authorize(Roles = "Admin")]
         [Route("admin/getAllRoles")]
         public Dictionary<string, string> GetAllRoles() 
