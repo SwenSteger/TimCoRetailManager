@@ -39,7 +39,7 @@ namespace TRMApi.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")]
         [Route("admin/getAllUsers")]
-        public List<ApplicationUserModel> GetAllUsers()
+        public async Task<List<ApplicationUserModel>> GetAllUsers()
         {
 	        var output = new List<ApplicationUserModel>();
 
@@ -55,6 +55,7 @@ namespace TRMApi.Controllers
 		        {
 			        Id = user.Id,
 			        Email = user.Email,
+			        Username = user.UserName, // (await _userManager.FindByIdAsync(user.Id))?.UserName
 			        Roles = new Dictionary<string, string>()
 		        };
 		        userModel.Roles = userRoles
