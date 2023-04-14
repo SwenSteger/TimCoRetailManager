@@ -8,7 +8,7 @@
 
 <div>
 	<GlobalJsInteropInitializer />
-	<Navigation IsAuthenticated="@IsAuthenticated" Username="@Username" />
+	<Navigation IsAuthenticated="@IsAuthenticated" Username="@Username" UserRoles="@UserRoles" />
 
 	<main id="content-container" class="container content-container">
 		<article class="content px-4 bg-content">
@@ -39,6 +39,7 @@
 </div>
 
 @code {
+	[Inject] private IUserEndpoint _userEndpoint { get; set; }
 	[CascadingParameter] public bool NotFound { get; set; }
 
 	private Exception? ExceptionObject { get; set; }
@@ -46,6 +47,7 @@
 	private bool HasConnectionError => ExceptionObject != null;
 	private string Username { get; set; } = "user";
 	private bool IsAuthenticated => LoggedInUserModel?.IsAuthenticated ?? false;
+	private List<string> UserRoles { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -63,7 +65,7 @@
 		StateHasChanged();
 		
 		if (!e.IsNavigationIntercepted)
-			await Task.Delay(1000); // Simulate loading time
+			await Task.Delay(500); // Simulate loading time
 		
 		await ValidateTokenAndHandleErrors(); // Add this line to await the completion of this method
 		
@@ -93,13 +95,24 @@
 		}
 	}
 
+	private bool IsInRole(string role)
+	{
+		return UserRoles?.Any(x => string.Equals(x, role, StringComparison.CurrentCultureIgnoreCase)) ?? false;
+	}
 
 	private async Task ValidateToken()
 	{
 		var token = await LocalStorage.GetItemAsync<string>("authToken");
+		
 		try
 		{
 			await ApiHelper.GetLoggedInUserInfo(token);
+			
+			// I guess we'll need to find out user-roles too, if we want to know who's admin or not
+			var allUsers = await _userEndpoint.GetAll();
+			var loggedInUser = allUsers.FirstOrDefault(x => x.Id == LoggedInUserModel.Id);
+			if (loggedInUser != null)
+				UserRoles = loggedInUser.Roles.Values.ToList();
 		}
 		catch (ApiException ex)
 		{

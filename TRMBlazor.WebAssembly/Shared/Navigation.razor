@@ -19,22 +19,27 @@
 		@if (IsAuthenticated)
 		{
 			<ul class="navbar-nav me-auto">
+				@if (IsInRole("Cashier"))
+				{
+					<li class="nav-item">
+						<NavLink class="nav-link" href="/sales" Match="NavLinkMatch.Prefix">
+							<span class="oi oi-cart" aria-hidden="true"></span> Sales
+						</NavLink>
+					</li>
+				}
 				<li class="nav-item">
-					<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-						<span class="oi oi-cart" aria-hidden="true"></span> Sales
+					<NavLink class="nav-link" href="/todo" Match="NavLinkMatch.Prefix">
+						<span class="oi oi-code" aria-hidden="true"></span> Todo
 					</NavLink>
 				</li>
-				<li class="nav-item">
-					<NavLink class="nav-link" href="/profile" Match="NavLinkMatch.Prefix">
-						<span class="oi oi-person" aria-hidden="true"></span> Profile
-					</NavLink>
-				</li>
-				<li class="nav-item">
-                	<NavLink class="nav-link" href="/userroles" Match="NavLinkMatch.Prefix">
-                		<span class="oi oi-person" aria-hidden="true"></span> User Roles
-                	</NavLink>
-                </li>
-                
+				@if (IsInRole("Admin"))
+				{
+					<li class="nav-item">
+						<NavLink class="nav-link" href="/admin/users" Match="NavLinkMatch.Prefix">
+							<span class="oi oi-person" aria-hidden="true"></span> Users
+						</NavLink>
+					</li>
+				}
 			</ul>
 			<div class="welcome_user">
 				<span>Welcome, @Username</span>
@@ -73,6 +78,7 @@
 @code {
 	[Parameter] public bool IsAuthenticated { get; set; }
 	[Parameter] public string Username { get; set; }
+	[Parameter] public List<string> UserRoles { get; set; }
 	
 	private ElementReference loginModal;
 	private Login? _loginComponent;
@@ -85,6 +91,10 @@
 		JsInteropEvents.OnJsRuntimeReady += LoadJSInterop;
 	}
 
+	private bool IsInRole(string role)
+	{
+		return UserRoles?.Any(x => string.Equals(x, role, StringComparison.CurrentCultureIgnoreCase)) ?? false;
+	}
 	private async Task LoadJSInterop()
 	{
 		_objectReference = DotNetObjectReference.Create(this);

@@ -1,4 +1,4 @@
-﻿@page "/userroles"
+﻿@page "/admin/users"
 
 <h1>User Administration</h1>
 
@@ -7,7 +7,7 @@
 		<h2>Users</h2>
 		<div class="list-group-wrapper d-flex flex-column">
 			<div class="list-group">
-				@foreach (var user in Users)
+				@foreach (var user in AllUsers)
 				{
 					<button type="button" class="list-group-item list-group-item-action @SelectedClass" @onclick="() => OnUserSelectionChanged(user)">
 						<h4>@user.Username</h4>
@@ -61,7 +61,7 @@
 @code {
 	[Inject] private IUserEndpoint _userEndpoint { get; set; }
 
-	protected List<UserModel> Users { get; set; } = new List<UserModel>();
+	protected List<UserModel> AllUsers { get; set; } = new List<UserModel>();
 	protected UserModel SelectedUser { get; set; }
 	protected List<string> UserRoles { get; set; } = new List<string>();
 	protected List<string> AvailableRoles { get; set; } = new List<string>();
@@ -77,11 +77,11 @@
 	private async Task LoadUsers()
 	{
 		var users = await _userEndpoint.GetAll();
-		Users = new List<UserModel>(users);
+		AllUsers = new List<UserModel>(users);
 
-		if (Users.Any())
+		if (AllUsers.Any())
 		{
-			SelectedUser = Users.First();
+			SelectedUser = AllUsers.First();
 			await LoadRolesForUser(SelectedUser);
 		}
 	}
