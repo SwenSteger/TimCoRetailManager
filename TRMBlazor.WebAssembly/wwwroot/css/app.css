@@ -40,18 +40,21 @@ a:hover {
 .right-aligned {
 	text-align: right;
 }
+.selected-user,
 .selected-product,
 .selected-cart-item {
-	background-color: #f5f1f0;
+	background-color: rgba(0, 0, 0, 0.025);
 }
 .selected-product.product-list-item:hover,
 .selected-cart-item.cart-item:hover {
-	background-color: #f5f1f0;
+	background-color: rgba(0, 0, 0, 0.025);
 }
+.selected-user:hover,
 .product-list-item:hover,
 .cart-item:hover {
 	cursor: pointer;
-	background-color: rgba(0, 0, 0, 0.025);
+	/*background-color: rgba(0, 0, 0, 0.025);*/
+	background-color: #f5f1f066;
 }
 
 .message-container {

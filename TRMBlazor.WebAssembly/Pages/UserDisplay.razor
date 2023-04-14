@@ -5,45 +5,55 @@
 <div class="row">
 	<div class="col-md-4">
 		<h2>Users</h2>
-		<div class="list-group">
-			@foreach (var user in Users)
-			{
-				<button type="button" class="list-group-item list-group-item-action" @onclick="() => OnUserSelectionChanged(user)">
-					<div>@user.Username</div>
-					<small>
-						@foreach (var role in user.Roles)
-						{
-							<span class="badge badge-warning text-dark">@role.Value</span>
-						}
-					</small>
-				</button>
-			}
+		<div class="list-group-wrapper d-flex flex-column">
+			<div class="list-group">
+				@foreach (var user in Users)
+				{
+					<button type="button" class="list-group-item list-group-item-action @SelectedClass" @onclick="() => OnUserSelectionChanged(user)">
+						<h4>@user.Username</h4>
+						<h6>@user.Email</h6>
+						<small>
+							@foreach (var role in user.Roles.OrderBy(x => x.Value))
+							{
+								<span class="badge bg-dark-subtle text-dark m-1">@role.Value</span>
+							}
+						</small>
+					</button>
+				}
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
-		<h2>@SelectedUserName</h2>
-		<h3>Current Roles</h3>
-		<div>
-			@foreach (var role in UserRoles)
-			{
-				<div>
-					<span>@role</span>
-					<button class="btn btn-danger btn-sm" @onclick="@(async () => await RemoveSelectedRole(SelectedUser.Id, role))">Remove</button>
-				</div>
-			}
-		</div>
+		@if (SelectedUser != null)
+		{
+			<h2>Current Roles: <span>@SelectedUser.Email</span></h2>
+			<div class="list-group">
+				@foreach (var role in UserRoles.OrderBy(x => x))
+				{
+					<div class="d-flex flex-row list-group-item justify-content-between p-2 m-1">
+						<span>@role</span>
+						<button class="btn btn-danger btn-sm" @onclick="@(async () => await RemoveSelectedRole(SelectedUser.Id, role))">Remove</button>
+					</div>
+				}
+			</div>
+		}
 	</div>
 	<div class="col-md-4">
-		<h2>Add Role</h2>
-		<div>
-			@foreach (var role in AvailableRoles)
-			{
-				<div>
-					<span>@role</span>
-					<button class="btn btn-success btn-sm" @onclick="@(async () => await AddSelectedRole(role))">Add</button>
+		@if (SelectedUser != null)
+		{
+			<h2>Add Role</h2>
+			<div class="list-group-wrapper d-flex flex-column">
+				<div class="list-group">
+					@foreach (var role in AvailableRoles)
+					{
+						<div class="d-flex flex-row list-group-item justify-content-between p-2 m-1">
+							<span>@role</span>
+							<button class="btn btn-success btn-sm" @onclick="@(async () => await AddSelectedRole(role))">Add</button>
+						</div>
+					}
 				</div>
-			}
-		</div>
+			</div>
+		}
 	</div>
 </div>
 
@@ -56,7 +66,8 @@
 	protected List<string> UserRoles { get; set; } = new List<string>();
 	protected List<string> AvailableRoles { get; set; } = new List<string>();
 	protected string SelectedUserName => SelectedUser?.Username;
-	protected string SelectedAvailableRole { get; set; }
+	
+	protected string SelectedClass => SelectedUser != null ? "selected-user" : "";
 	
 	protected override async Task OnInitializedAsync()
 	{
@@ -67,10 +78,11 @@
 	{
 		var users = await _userEndpoint.GetAll();
 		Users = new List<UserModel>(users);
-		
-		if (Users.Count > 0)
+
+		if (Users.Any())
 		{
-			OnUserSelectionChanged(Users.First());
+			SelectedUser = Users.First();
+			await LoadRolesForUser(SelectedUser);
 		}
 	}
 
@@ -84,35 +96,29 @@
 			.ToList();
 	}
 
-	private void OnUserSelectionChanged(UserModel user)
+	private async Task OnUserSelectionChanged(UserModel user)
 	{
 		SelectedUser = user;
-		_ = LoadRolesForUser(user);
+		await LoadRolesForUser(user);
 	}
 
-	private async Task AddSelectedRole()
-	{
-		await _userEndpoint.AddUserToRole(SelectedUser.Id, SelectedAvailableRole);
-
-		UserRoles.Add(SelectedAvailableRole);
-		AvailableRoles.Remove(SelectedAvailableRole);
-	}
-	
 	private async Task AddSelectedRole(string role)
 	{
 		await _userEndpoint.AddUserToRole(SelectedUser.Id, role);
 
 		UserRoles.Add(role);
 		AvailableRoles.Remove(role);
+		await LoadUsers();
 	}
 	private async Task RemoveSelectedRole(string userId, string roleValue)
 	{
 		await _userEndpoint.RemoveUserFromRole(userId, roleValue);
 
-		if (SelectedUser != null && SelectedUser.Id == userId)
+		if (SelectedUser.Id == userId)
 		{
 			UserRoles.Remove(roleValue);
 			AvailableRoles.Add(roleValue);
+			await LoadUsers();
 		}
 	}
 

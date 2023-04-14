@@ -1,0 +1,24 @@
+﻿h2 {
+	font-size: 1.5rem;
+	font-weight: 500;
+	line-height: 1.2;
+	padding-left: 10px;
+}
+h2 span {
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+.list-group-wrapper {
+	min-height: 300px;
+	display: flex;
+	border: 1px solid #dee2e6;
+	border-radius: .25rem;
+	overflow-y: auto;
+}
+
+.flex-container {
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}

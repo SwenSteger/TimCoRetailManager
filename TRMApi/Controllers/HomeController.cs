@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Identity;
 using TRMApi.Models;
 
 namespace TRMApi.Controllers
 {
 	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
+    {
+        private readonly ILogger<HomeController> _logger;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly UserManager<IdentityUser> _userManager;
 
@@ -23,7 +26,7 @@ namespace TRMApi.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> Privacy()
+        public async Task<IActionResult> Privacy()
 		{
 			// string[] roles = { "Admin", "Manager", "Cashier" };
 			// foreach (string role in roles)
